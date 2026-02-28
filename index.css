@@ -1,5 +1,16 @@
 @import "tailwindcss";
 
+@layer base {
+  html, body {
+    overflow-x: hidden;
+    width: 100%;
+    position: relative;
+    margin: 0;
+    padding: 0;
+    -webkit-overflow-scrolling: touch;
+  }
+}
+
 @theme {
   --font-sans: "Figtree", ui-sans-serif, system-ui, sans-serif;
   --font-hero: "Figtree", sans-serif;

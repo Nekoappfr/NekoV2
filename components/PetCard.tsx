@@ -10,9 +10,9 @@ interface PetCardProps {
 const PetCard: React.FC<PetCardProps> = ({ listing }) => {
   const getServiceLabel = (type: string) => {
     switch (type) {
-      case 'BOARDING': return 'boarding';
+      case 'BOARDING': return 'garde chez le pet sitter';
       case 'house sitting': return 'house sitting';
-      case 'drop in visits': return 'visits';
+      case 'drop in visits': return 'Visites';
       default: return type.toLowerCase();
     }
   };
@@ -47,9 +47,9 @@ const PetCard: React.FC<PetCardProps> = ({ listing }) => {
           alt={listing.petName} 
         />
         
-        <div className="absolute top-6 left-6 z-10 flex flex-col gap-2">
-          <div className="px-4 py-1.5 bg-white/40 backdrop-blur-md border border-white/20 rounded-lg shadow-sm w-fit">
-            <span className="text-[10px] md:text-[11px] font-bold text-warm-text uppercase tracking-widest whitespace-nowrap">
+        <div className="absolute top-4 left-4 md:top-6 md:left-6 z-10 flex flex-col gap-2">
+          <div className="px-2.5 md:px-4 py-1 md:py-1.5 bg-white/40 backdrop-blur-md border border-white/20 rounded-full shadow-sm w-fit">
+            <span className="text-[8.5px] md:text-[11px] font-bold text-warm-text uppercase tracking-widest whitespace-nowrap">
               {getServiceLabel(listing.serviceType)}
             </span>
           </div>
@@ -59,7 +59,10 @@ const PetCard: React.FC<PetCardProps> = ({ listing }) => {
         <div className="absolute inset-0 bg-gradient-to-t from-warm-text/60 via-transparent to-transparent opacity-80 group-hover:opacity-90 transition-opacity pointer-events-none"></div>
         
         <div className="absolute bottom-6 left-6 md:bottom-8 md:left-8 z-10">
-          <h3 className="text-[20px] md:text-[28px] font-bold text-white leading-tight tracking-tight drop-shadow-md">
+          <h3 
+            className="text-[20px] md:text-[28px] font-bold leading-tight tracking-tight drop-shadow-md"
+            style={{ color: 'white' }}
+          >
             {listing.petName}
           </h3>
         </div>

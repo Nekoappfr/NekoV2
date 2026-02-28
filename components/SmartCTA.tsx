@@ -5,9 +5,10 @@ import BookingDropdown from './BookingDropdown';
 interface SmartCTAProps {
   onTrigger: () => void;
   onSearchStateChange?: (isOpen: boolean) => void;
+  variant?: 'default' | 'transparent';
 }
 
-const SmartCTA: React.FC<SmartCTAProps> = ({ onTrigger, onSearchStateChange }) => {
+const SmartCTA: React.FC<SmartCTAProps> = ({ onTrigger, onSearchStateChange, variant = 'default' }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [selectedDates, setSelectedDates] = useState('');
 
@@ -26,17 +27,29 @@ const SmartCTA: React.FC<SmartCTAProps> = ({ onTrigger, onSearchStateChange }) =
     <div className="w-full relative">
       {!isOpen ? (
         <div 
-          className="relative flex items-center bg-white/95 backdrop-blur-md border border-warm-border rounded-2xl p-1.5 pr-1.5 cursor-pointer group shadow-xl transition-all duration-300 hover:border-neko-primary/30"
+          className={`relative flex items-center transition-all duration-300 cursor-pointer group ${
+            variant === 'transparent' 
+              ? 'bg-transparent border-none shadow-none p-0' 
+              : 'bg-white/95 backdrop-blur-md border border-warm-border rounded-2xl p-1.5 pr-1.5 shadow-xl hover:border-neko-primary/30'
+          }`}
           onClick={() => toggleSearch(true)}
         >
-          <div className="flex-1 px-3 py-3 overflow-hidden">
+          <div className={`flex-1 overflow-hidden ${
+            variant === 'transparent' 
+              ? 'bg-white rounded-2xl px-4 py-3 border border-warm-border/50 shadow-sm' 
+              : 'px-3 py-3'
+          }`}>
             <p className="font-refined text-[14px] sm:text-[16px] md:text-[18px] font-semibold text-gray-400 group-hover:text-neko-primary transition-colors whitespace-nowrap">
               Déposer une annonce gratuitement
             </p>
           </div>
           
           <button 
-            className="w-10 h-10 bg-neko-primary rounded-xl flex items-center justify-center text-white shadow-lg hover:bg-[#A34D5E] transition-all duration-300 group-hover:scale-105"
+            className={`flex items-center justify-center text-white shadow-lg hover:bg-[#A34D5E] transition-all duration-300 group-hover:scale-105 ${
+              variant === 'transparent'
+                ? 'w-12 h-12 bg-neko-primary rounded-2xl ml-2'
+                : 'w-10 h-10 bg-neko-primary rounded-xl'
+            }`}
             onClick={(e) => {
               e.stopPropagation();
               toggleSearch(true);

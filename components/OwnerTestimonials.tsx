@@ -50,17 +50,17 @@ const TESTIMONIALS = [
 
 const OwnerTestimonials: React.FC = () => {
   return (
-    <div className="space-y-48 py-16">
+    <div className="space-y-48 py-16 overflow-hidden">
       {/* Minimalist Testimonials Section */}
       <div className="flex flex-col">
-        <div className="flex items-center gap-8 mb-20">
+        <div className="flex items-center gap-8 mb-20 px-4 md:px-0">
           <h2 className="text-[32px] md:text-[48px] font-bold text-warm-text leading-tight tracking-tight">
             Paroles de voisins
           </h2>
           <div className="h-[1px] flex-1 bg-warm-border"></div>
         </div>
         
-        <div className="horizontal-scroll-container no-scrollbar -mx-6 px-6 gap-12 md:gap-24">
+        <div className="horizontal-scroll-container no-scrollbar -mx-4 px-4 md:-mx-6 md:px-6 lg:-mx-12 lg:px-12 gap-12 md:gap-24">
           {TESTIMONIALS.map((t) => (
             <div 
               key={t.id} 
@@ -105,7 +105,7 @@ const OwnerTestimonials: React.FC = () => {
               Notre équipe vous répond en quelques heures. <br className="hidden md:block" />
               Nous sommes de vraies personnes, passionnées par les chats.
             </p>
-            <button className="bg-white border-2 border-warm-text hover:bg-warm-text hover:text-white text-warm-text text-[16px] font-bold px-12 py-5 rounded-lg transition-all duration-300 active:scale-95 shadow-2xl">
+            <button className="bg-white border-2 border-warm-text hover:bg-warm-text hover:text-white text-warm-text text-[16px] font-bold px-12 py-5 rounded-full transition-all duration-300 active:scale-95 shadow-2xl">
               Nous contacter
             </button>
           </div>

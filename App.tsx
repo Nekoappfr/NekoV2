@@ -41,7 +41,7 @@ export type ViewState = 'home' | 'register-sitter' | 'lead_capture' | 'owner_das
 
 const Header: React.FC<{ onAction: (intent: 'login' | 'join') => void, onViewChange: (v: ViewState) => void }> = ({ onAction, onViewChange }) => {
   return (
-    <header className="hidden md:flex sticky top-0 bg-white/90 backdrop-blur-md border-b border-warm-border z-50 px-6 lg:px-12 py-5 items-center justify-between w-full">
+    <header className="hidden md:flex sticky top-0 left-0 right-0 bg-white/90 backdrop-blur-md border-b border-warm-border z-50 px-6 lg:px-12 py-5 items-center justify-between">
       <div className="flex items-center gap-2 cursor-pointer group" onClick={() => onViewChange('home')}>
         <SnoutLogo className="w-8 h-8 transition-transform group-hover:scale-110" />
         <span className="text-[22px] font-bold tracking-tight text-warm-text">Neko</span>
@@ -80,8 +80,8 @@ const MobileBottomNav: React.FC<{ onViewChange: (view: ViewState) => void, curre
   const isActive = (view: ViewState) => currentView === view;
 
   return (
-    <div className="md:hidden fixed bottom-0 left-0 right-0 z-[100] pointer-events-auto px-4 pb-4">
-      <nav className="w-full h-[64px] bg-white/80 backdrop-blur-xl border border-[#E9E9E7]/50 flex items-center justify-around px-2 shadow-[0_8px_32px_rgba(0,0,0,0.08)] rounded-[24px]">
+    <div className="md:hidden fixed bottom-0 left-0 right-0 z-[100] pointer-events-auto">
+      <nav className="w-full h-[64px] bg-white/90 backdrop-blur-xl border-t border-warm-border flex items-center justify-around px-2 shadow-[0_-4px_20px_rgba(0,0,0,0.04)]">
         
         <button 
           className={`relative flex flex-col items-center justify-center flex-1 h-full transition-all duration-300 active:scale-95 text-[#1C1C1B]/40`}
@@ -241,8 +241,8 @@ const App: React.FC = () => {
               
               <div className="absolute bottom-8 left-6 right-6 md:bottom-12 md:left-12 md:right-12 z-10 flex flex-col gap-4 md:gap-8">
                 <h1 className="!text-white leading-[1.1] tracking-tight">
-                  <span className="block text-[32px] md:text-[64px] font-extrabold">Confiez-le à un</span>
-                  <span className="block text-[32px] md:text-[64px] font-extrabold">voisin de confiance</span>
+                  <span className="block text-[32px] md:text-[64px] font-extrabold">Partez serein, il est</span>
+                  <span className="block text-[32px] md:text-[64px] font-extrabold">entre de bonnes mains</span>
                 </h1>
 
                 <div className="max-w-[520px]">
@@ -251,14 +251,14 @@ const App: React.FC = () => {
                 
                 <div className="flex gap-2 overflow-x-auto no-scrollbar w-full md:w-fit">
                   {[
-                    { id: 'boarding', label: 'Garde chez le pet-sitter' },
+                    { id: 'boarding', label: 'Garde chez le pet sitter' },
                     { id: 'visit', label: 'Visites' },
                     { id: 'housesitting', label: 'Home Sitting' }
                   ].map((tab) => (
                     <button
                       key={tab.id}
                       onClick={() => handleServiceClick(tab.id as PricingTabType)}
-                      className={`px-4 py-2 rounded-full text-[11px] md:text-[13px] font-medium transition-all whitespace-nowrap border backdrop-blur-md ${
+                      className={`px-3 md:px-4 py-1.5 md:py-2 rounded-full text-[10px] md:text-[12px] font-bold transition-all whitespace-nowrap border backdrop-blur-md ${
                         activePricingTab === tab.id 
                           ? 'bg-white/30 border-white text-white shadow-md' 
                           : 'bg-black/10 border-white/20 text-white/80 hover:text-white hover:bg-white/20'
@@ -272,7 +272,7 @@ const App: React.FC = () => {
             </div>
           </div>
 
-          <div className="flex flex-col items-center justify-center mt-10 mb-6">
+          <div className="flex flex-col items-center justify-center mt-4 md:mt-10 mb-6">
             <div className="inline-flex items-center gap-4 px-6 py-3 rounded-full bg-white border border-warm-border shadow-lg animate-float">
               <div className="flex -space-x-3">
                 {[1, 2, 3, 4, 5].map((i) => (
@@ -333,15 +333,15 @@ const App: React.FC = () => {
   };
 
   return (
-    <div className={`min-h-screen bg-warm-bg w-full selection:bg-neko-primary/20 ${(viewState === 'lead_capture' || viewState === 'role_selection' || isSearchActive || isAuthModalOpen) ? 'overflow-hidden h-screen' : ''}`}>
+    <div className={`min-h-screen bg-warm-bg w-full overflow-x-hidden selection:bg-neko-primary/20 ${(viewState === 'lead_capture' || viewState === 'role_selection' || isSearchActive || isAuthModalOpen) ? 'overflow-hidden h-screen' : ''}`}>
       {/* Sticky Search Bar */}
-      <div className={`fixed top-0 left-0 right-0 z-[60] w-full bg-white/90 backdrop-blur-xl border-b border-warm-border shadow-xl transform transition-all duration-500 ease-in-out px-4 py-3 md:px-12 ${isSticky && viewState === 'home' && !isSearchActive ? 'translate-y-0 opacity-100' : '-translate-y-full opacity-0 pointer-events-none'}`}>
+      <div className={`fixed top-0 left-0 right-0 z-[60] bg-white/40 backdrop-blur-md border-b border-warm-border/10 transform transition-all duration-500 ease-in-out px-4 py-3 md:px-12 ${isSticky && viewState === 'home' && !isSearchActive ? 'translate-y-0 opacity-100' : '-translate-y-full opacity-0 pointer-events-none'}`}>
         <div className="max-w-7xl mx-auto flex items-center gap-6">
           <div className="hidden md:block cursor-pointer hover:scale-110 transition-transform" onClick={() => setViewState('home')}>
             <SnoutLogo className="w-9 h-9" />
           </div>
           <div className="flex-1 max-w-2xl">
-            <SmartCTA onTrigger={() => setViewState('lead_capture')} onSearchStateChange={setIsSearchActive} />
+            <SmartCTA onTrigger={() => setViewState('lead_capture')} onSearchStateChange={setIsSearchActive} variant="transparent" />
           </div>
           <div className="hidden md:flex items-center gap-6">
             <button onClick={() => handleActionClick('login')} className="text-[14px] font-medium text-warm-text/70 hover:text-neko-primary transition-colors">Connexion</button>

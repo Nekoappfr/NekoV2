@@ -1,0 +1,495 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mon Compte | Neko Community</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Figtree:wght@500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --neko-rose:    #C25E72;
+            --anthracite:   #222222;
+            --white:        #FFFFFF;
+            --warm-paper:   #F7F7F7;
+            --warm-border:  #EBEBEB;
+            --neko-olive:   #5A5A40;
+            --font-main: 'Figtree', sans-serif;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        body {
+            font-family: var(--font-main);
+            background-color: #f0f0f0;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            min-height: 100vh;
+            color: var(--anthracite);
+        }
+
+        /* Container Mobile 390px */
+        .iphone-container {
+            width: 390px;
+            height: 844px;
+            background-color: var(--white);
+            position: relative;
+            overflow-y: auto;
+            overflow-x: hidden;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.1);
+            scrollbar-width: none;
+        }
+        .iphone-container::-webkit-scrollbar { display: none; }
+
+        /* Header */
+        header {
+            padding: 24px 24px 12px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: var(--white);
+        }
+        .logo {
+            background: var(--anthracite);
+            color: var(--white);
+            padding: 6px 12px;
+            border-radius: 10px;
+            font-weight: 700;
+            font-size: 18px;
+            letter-spacing: -0.5px;
+        }
+
+        /* Animations */
+        @keyframes fadeUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .animate-fade-up {
+            animation: fadeUp 0.5s ease forwards;
+        }
+
+        /* Hero Card */
+        .hero-card {
+            margin: 16px 20px;
+            padding: 20px;
+            background: linear-gradient(135deg, #C25E72 0%, #A34A5E 100%);
+            border-radius: 32px;
+            color: var(--white);
+            box-shadow: 0 8px 32px rgba(194, 94, 114, 0.2);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        .profile-info { display: flex; align-items: center; gap: 12px; }
+        .avatar {
+            width: 52px;
+            height: 52px;
+            background: rgba(255,255,255,0.2);
+            border: 2px solid rgba(255,255,255,0.4);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            font-weight: 700;
+        }
+        .profile-text h1 { font-size: 18px; font-weight: 700; letter-spacing: -0.5px; }
+        .rating { display: flex; align-items: center; gap: 4px; margin-top: 2px; }
+        .stars { display: flex; gap: 2px; color: white; }
+        .stars span { font-size: 10px; }
+        .rating-count { font-size: 11px; font-weight: 700; opacity: 0.8; }
+        .hero-chevron {
+            width: 32px;
+            height: 32px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+        }
+
+        /* Sections */
+        section { padding: 24px 20px 0; }
+        .section-label {
+            font-size: 11px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: var(--neko-olive);
+            margin-bottom: 12px;
+            padding-left: 4px;
+        }
+
+        /* Annonce Card */
+        .annonce-card {
+            background: var(--white);
+            border: 1px solid var(--warm-border);
+            border-radius: 32px;
+            padding: 20px;
+            box-shadow: 0 4px 16px rgba(0,0,0,0.07);
+            transition: border-color 0.2s;
+        }
+        .annonce-card:hover { border-color: var(--neko-rose); }
+        .annonce-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 12px; }
+        .annonce-title h3 { font-size: 16px; font-weight: 700; color: var(--anthracite); }
+        .annonce-title p { font-size: 14px; color: var(--neko-olive); margin-top: 2px; }
+        .status-pill {
+            background: #FFF0F2;
+            color: var(--neko-rose);
+            padding: 4px 12px;
+            border-radius: 9999px;
+            font-size: 10px;
+            font-weight: 700;
+            letter-spacing: 1px;
+        }
+        .annonce-footer {
+            margin-top: 16px;
+            padding-top: 16px;
+            border-top: 1px solid var(--warm-border);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .applicants { display: flex; align-items: center; gap: 8px; }
+        .avatars-stack { display: flex; margin-right: 4px; }
+        .mini-avatar {
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            border: 2px solid var(--white);
+            margin-left: -8px;
+        }
+        .mini-avatar:first-child { margin-left: 0; }
+        .applicants-text { font-size: 13px; font-weight: 600; color: var(--neko-rose); }
+        .see-more { font-size: 13px; font-weight: 700; color: var(--anthracite); text-decoration: none; }
+
+        /* Mes Chats */
+        .chats-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 16px; }
+        .chat-card {
+            background: var(--warm-paper);
+            border-radius: 32px;
+            padding: 16px;
+            text-align: center;
+            transition: transform 0.2s;
+        }
+        .chat-card:hover { transform: translateY(-2px); }
+        .chat-emoji { font-size: 32px; margin-bottom: 8px; display: block; }
+        .chat-name { font-size: 15px; font-weight: 700; display: block; }
+        .chat-info { font-size: 12px; color: var(--neko-olive); display: block; margin-bottom: 12px; }
+        .chat-pill {
+            background: #FFF0F2;
+            color: var(--neko-rose);
+            padding: 6px 16px;
+            border-radius: 9999px;
+            font-size: 12px;
+            font-weight: 700;
+            display: inline-block;
+        }
+        .add-chat-btn {
+            width: 100%;
+            padding: 14px;
+            border: 1.5px dashed var(--neko-rose);
+            border-radius: 9999px;
+            color: var(--neko-rose);
+            font-weight: 700;
+            font-size: 14px;
+            background: transparent;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        .add-chat-btn:hover { background: #FFF0F2; }
+
+        /* Menu Cards */
+        .menu-card {
+            background: var(--white);
+            border: 1px solid var(--warm-border);
+            border-radius: 32px;
+            overflow: hidden;
+            box-shadow: 0 4px 16px rgba(0,0,0,0.07);
+        }
+        .menu-item {
+            display: flex;
+            align-items: center;
+            padding: 16px 20px;
+            gap: 16px;
+            cursor: pointer;
+            transition: background 0.2s;
+            text-decoration: none;
+            color: inherit;
+        }
+        .menu-item:not(:last-child) { border-bottom: 1px solid var(--warm-border); }
+        .menu-item:hover { background: #FFF0F2; }
+        .menu-icon {
+            width: 40px;
+            height: 40px;
+            background: var(--warm-paper);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+        }
+        .menu-label { flex: 1; }
+        .menu-label span { display: block; font-size: 14px; font-weight: 700; }
+        .menu-label p { font-size: 12px; color: var(--neko-olive); margin-top: 2px; }
+        .menu-badge {
+            background: var(--neko-rose);
+            color: var(--white);
+            padding: 2px 8px;
+            border-radius: 9999px;
+            font-size: 11px;
+            font-weight: 700;
+        }
+        .menu-value { font-size: 13px; color: #999; font-weight: 500; }
+        .chevron { color: var(--warm-border); font-size: 20px; font-weight: 300; }
+
+        /* Logout */
+        .logout-btn {
+            margin: 32px 20px 100px;
+            width: calc(100% - 40px);
+            padding: 16px;
+            border: 1px solid var(--warm-border);
+            border-radius: 8px;
+            background: transparent;
+            color: var(--neko-olive);
+            font-weight: 700;
+            font-size: 15px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .logout-btn:hover { background: #FFF0F2; color: var(--neko-rose); border-color: #FFF0F2; }
+
+        /* Bottom Nav */
+        .bottom-nav {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 84px;
+            background: var(--white);
+            border-top: 1px solid var(--warm-border);
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            padding-bottom: 20px;
+            z-index: 100;
+        }
+        .nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 4px;
+            color: var(--anthracite);
+            opacity: 0.4;
+            text-decoration: none;
+            position: relative;
+        }
+        .nav-item.active { opacity: 1; color: var(--neko-rose); }
+        .nav-item span { font-size: 10px; font-weight: 700; }
+        .nav-badge {
+            position: absolute;
+            top: -4px;
+            right: -4px;
+            background: var(--neko-rose);
+            color: var(--white);
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            font-size: 9px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 2px solid var(--white);
+        }
+        .nav-center {
+            width: 56px;
+            height: 56px;
+            background: var(--neko-rose);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--white);
+            font-size: 24px;
+            margin-top: -40px;
+            box-shadow: 0 8px 24px rgba(194, 94, 114, 0.4);
+            transition: transform 0.2s;
+        }
+        .nav-center:hover { transform: scale(1.1); }
+    </style>
+</head>
+<body>
+
+<div class="iphone-container">
+    <!-- Header -->
+    <header>
+        <div class="logo">neko</div>
+    </header>
+
+    <!-- Hero Card -->
+    <div class="hero-card animate-fade-up">
+        <div class="profile-info">
+            <div class="avatar">J</div>
+            <div class="profile-text">
+                <h1>Juliette M.</h1>
+                <div class="rating">
+                    <div class="stars">
+                        <span>★</span><span>★</span><span>★</span><span>★</span><span style="opacity: 0.3;">★</span>
+                    </div>
+                    <span class="rating-count">(10)</span>
+                </div>
+            </div>
+        </div>
+        <div class="hero-chevron">›</div>
+    </div>
+
+    <!-- Annonce en cours -->
+    <section class="animate-fade-up" style="animation-delay: 0.1s;">
+        <div class="section-label">Annonce en cours</div>
+        <div class="annonce-card">
+            <div class="annonce-header">
+                <div class="annonce-title">
+                    <h3>Garde Mochi & Yuzu</h3>
+                    <p>14 – 21 mars 2026</p>
+                </div>
+                <div class="status-pill">ACTIVE</div>
+            </div>
+            <div class="annonce-footer">
+                <div class="applicants">
+                    <div class="avatars-stack">
+                        <div class="mini-avatar" style="background: #FFD1DC;"></div>
+                        <div class="mini-avatar" style="background: #D1F2EB;"></div>
+                        <div class="mini-avatar" style="background: #FEF9E7;"></div>
+                    </div>
+                    <span class="applicants-text">5 pet sitters ont postulé</span>
+                </div>
+                <a href="#" class="see-more">Voir →</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Mes Chats -->
+    <section class="animate-fade-up" style="animation-delay: 0.2s;">
+        <div class="section-label">Mes chats</div>
+        <div class="chats-grid">
+            <div class="chat-card">
+                <span class="chat-emoji">🐈‍⬛</span>
+                <span class="chat-name">Mochi</span>
+                <span class="chat-info">British Shorthair</span>
+                <div class="chat-pill">2 ans · Fiche</div>
+            </div>
+            <div class="chat-card">
+                <span class="chat-emoji">🐈</span>
+                <span class="chat-name">Yuzu</span>
+                <span class="chat-info">Européen</span>
+                <div class="chat-pill">4 ans · Fiche</div>
+            </div>
+        </div>
+        <button class="add-chat-btn">+ Ajouter un chat</button>
+    </section>
+
+    <!-- Mon Espace -->
+    <section class="animate-fade-up" style="animation-delay: 0.3s;">
+        <div class="section-label">Mon espace</div>
+        <div class="menu-card">
+            <a href="#" class="menu-item">
+                <div class="menu-icon">📋</div>
+                <div class="menu-label">
+                    <span>Mes annonces</span>
+                    <p>Historique & annonces passées</p>
+                </div>
+                <div class="chevron">›</div>
+            </a>
+            <a href="#" class="menu-item">
+                <div class="menu-icon">💬</div>
+                <div class="menu-label">
+                    <span>Messages</span>
+                </div>
+                <div class="menu-badge">3</div>
+                <div class="chevron">›</div>
+            </a>
+            <a href="#" class="menu-item">
+                <div class="menu-icon">⭐</div>
+                <div class="menu-label">
+                    <span>Pet sitters favoris</span>
+                    <p>Sauvegardés & notés</p>
+                </div>
+                <div class="chevron">›</div>
+            </a>
+            <a href="#" class="menu-item">
+                <div class="menu-icon">💳</div>
+                <div class="menu-label">
+                    <span>Paiements</span>
+                    <p>Moyens de paiement · Factures</p>
+                </div>
+                <div class="chevron">›</div>
+            </a>
+        </div>
+    </section>
+
+    <!-- Paramètres -->
+    <section class="animate-fade-up" style="animation-delay: 0.4s;">
+        <div class="section-label">Paramètres</div>
+        <div class="menu-card">
+            <div class="menu-item">
+                <div class="menu-icon">👤</div>
+                <div class="menu-label"><span>Informations personnelles</span></div>
+                <div class="chevron">›</div>
+            </div>
+            <div class="menu-item">
+                <div class="menu-icon">🔔</div>
+                <div class="menu-label"><span>Notifications</span></div>
+                <div class="menu-value">Activées</div>
+                <div class="chevron">›</div>
+            </div>
+            <div class="menu-item">
+                <div class="menu-icon">🔒</div>
+                <div class="menu-label"><span>Sécurité du compte</span></div>
+                <div class="chevron">›</div>
+            </div>
+            <div class="menu-item">
+                <div class="menu-icon">❓</div>
+                <div class="menu-label"><span>Aide & contact</span></div>
+                <div class="chevron">›</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Logout -->
+    <button class="logout-btn">Se déconnecter</button>
+
+    <!-- Bottom Nav -->
+    <div class="bottom-nav">
+        <a href="#" class="nav-item">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+            <span>🔍 Rechercher</span>
+        </a>
+        <a href="#" class="nav-item">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>
+            <div class="nav-badge">2</div>
+            <span>❤️ Favoris</span>
+        </a>
+        <div class="nav-center">➕</div>
+        <a href="#" class="nav-item">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>
+            <div class="nav-badge">3</div>
+            <span>💬 Messages</span>
+        </a>
+        <a href="#" class="nav-item active">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+            <span>👤 Compte</span>
+        </a>
+    </div>
+</div>
+
+</body>
+</html>

@@ -43,7 +43,7 @@ interface PricingSectionProps {
 const PricingSection: React.FC<PricingSectionProps> = ({ activeTab, setActiveTab }) => {
   const plans: Record<PricingTabType, Plan> = {
     boarding: { 
-      tabLabel: "Garde chez le pet-sitter",
+      tabLabel: "Garde chez le pet sitter",
       title: "Famille d'accueil", 
       price: "13€", 
       unit: "nuit", 
@@ -81,7 +81,7 @@ const PricingSection: React.FC<PricingSectionProps> = ({ activeTab, setActiveTab
           Tarifs transparents
         </h2>
         <p className="text-[18px] text-warm-text/50 font-medium mt-4">
-          Aucun frais caché, tout est inclus
+          Les prix comprennent tous les frais
         </p>
       </div>
 

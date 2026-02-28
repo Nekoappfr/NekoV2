@@ -144,9 +144,9 @@ const SitterProfile: React.FC<SitterProfileProps> = ({ sitterId, onBack, onMessa
   }, [startDate, endDate, service, visitsPerDay, sitter.price]);
 
   return (
-    <div className="bg-[#FAFAFA] min-h-screen pb-16">
+    <div className="bg-[#FAFAFA] min-h-screen pb-16 overflow-x-hidden">
       {/* HEADER COMPACT */}
-      <nav className="sticky top-0 bg-[#FAFAFA]/95 backdrop-blur-md border-b border-[#E9E9E7] z-[60] px-4 lg:px-8 py-2.5 flex items-center justify-between w-full shadow-sm">
+      <nav className="sticky top-0 left-0 right-0 bg-[#FAFAFA]/95 backdrop-blur-md border-b border-[#E9E9E7] z-[60] px-4 lg:px-8 py-2.5 flex items-center justify-between shadow-sm">
         <div className="flex items-center gap-4">
           <button onClick={onBack} className="p-2 hover:bg-[#F0F0EF] rounded-md transition-all active:scale-90">
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#1C1C1B" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>
