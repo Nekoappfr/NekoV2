@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en" style="scroll-behavior: smooth;">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Neko | Parisian Cat Sitting Community</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Figtree:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --warm-bg: #FFFFFF;
+            --warm-paper: #F7F7F7;
+            --warm-border: #EBEBEB;
+            --warm-text: #222222;
+            --neko-brown: #222222;
+            --neko-primary: #C25E72;
+            --neko-olive: #5A5A40;
+            --font-main: 'Figtree', sans-serif;
+        }
+
+        body {
+            font-family: var(--font-main);
+            color: var(--warm-text);
+            background-color: var(--warm-bg);
+            -webkit-font-smoothing: antialiased;
+            font-size: 16px;
+            overflow-x: hidden;
+            letter-spacing: -0.02em;
+        }
+
+        .font-refined, .font-hero, .font-serif-display {
+            font-family: var(--font-main);
+            letter-spacing: -0.03em;
+        }
+
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+        
+        .horizontal-scroll-container {
+            display: flex;
+            overflow-x: auto;
+            scroll-snap-type: x mandatory;
+            gap: 16px;
+            padding-bottom: 8px;
+        }
+
+        .card-notion {
+            background: white;
+            border: 1px solid var(--warm-border);
+            border-radius: 24px;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.02);
+        }
+        .card-notion:hover {
+            border-color: var(--neko-primary);
+            transform: translateY(-4px);
+            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.06);
+        }
+
+        .btn-primary {
+            background-color: var(--neko-primary);
+            color: white;
+            border-radius: 16px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            text-transform: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 16px 40px;
+            font-size: 15px;
+            letter-spacing: -0.01em;
+            box-shadow: 0 10px 25px rgba(194, 94, 114, 0.2);
+        }
+        .btn-primary:hover {
+            background-color: #A34D5E;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(194, 94, 114, 0.3);
+        }
+
+        h2, h3, h4 {
+            color: var(--warm-text);
+            letter-spacing: -0.01em;
+        }
+
+        hr {
+            border: 0;
+            border-top: 1px solid var(--warm-border);
+        }
+
+        /* Subtle fade-in for section entry */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .animate-section {
+            animation: fadeIn 0.8s ease-out forwards;
+        }
+
+        .scribble-underline {
+            position: relative;
+        }
+        .scribble-underline::after {
+            content: "";
+            position: absolute;
+            bottom: -2px;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background-image: url("data:image/svg+xml,%3Csvg width='100' height='4' viewBox='0 0 100 4' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1 3C20 1 40 4 60 2.5C80 1 95 3 99 2' stroke='%23C25E72' stroke-width='1.5' stroke-linecap='round' opacity='0.4'/%3E%3C/svg%3E");
+            background-size: cover;
+            opacity: 0.6;
+        }
+    </style>
+<script type="importmap">
+{
+  "imports": {
+    "react": "https://esm.sh/react@^19.2.4",
+    "react/": "https://esm.sh/react@^19.2.4/",
+    "react-dom/": "https://esm.sh/react-dom@^19.2.4/"
+  }
+}
+</script>
+<link rel="stylesheet" href="/index.css">
+</head>
+<body>
+    <div id="root"></div>
+<script type="module" src="/index.tsx"></script>
+</body>
+</html>

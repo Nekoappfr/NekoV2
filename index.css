@@ -1,0 +1,21 @@
+@import "tailwindcss";
+
+@theme {
+  --font-sans: "Figtree", ui-sans-serif, system-ui, sans-serif;
+  --font-hero: "Figtree", sans-serif;
+  --font-serif-display: "Figtree", sans-serif;
+  --font-refined: "Figtree", sans-serif;
+  
+  --color-warm-bg: #FFFFFF;
+  --color-warm-paper: #F7F7F7;
+  --color-warm-border: #EBEBEB;
+  --color-warm-text: #222222;
+  --color-neko-primary: #C25E72;
+  --color-neko-olive: #5A5A40;
+
+  @keyframes float {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-4px); }
+  }
+  --animate-float: float 3s ease-in-out infinite;
+}
