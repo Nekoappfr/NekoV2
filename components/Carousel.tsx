@@ -2,7 +2,11 @@ import React from 'react';
 import { MOCK_LISTINGS } from '../constants';
 import PetCard from './PetCard';
 
-const Carousel: React.FC = () => {
+interface CarouselProps {
+  onListingClick: (id: string) => void;
+}
+
+const Carousel: React.FC<CarouselProps> = ({ onListingClick }) => {
   return (
     <div className="relative w-full overflow-hidden">
       <div className="horizontal-scroll-container no-scrollbar py-2 gap-2.5 md:gap-8 lg:gap-10">
@@ -10,6 +14,7 @@ const Carousel: React.FC = () => {
           <PetCard 
             key={listing.id} 
             listing={listing} 
+            onClick={() => onListingClick(listing.id)}
           />
         ))}
         {/* Spacer for consistent end-of-scroll padding */}

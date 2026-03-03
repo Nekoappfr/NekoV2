@@ -5,9 +5,10 @@ import { PinIcon, StarIcon } from '../constants';
 
 interface PetCardProps {
   listing: PetListing;
+  onClick: () => void;
 }
 
-const PetCard: React.FC<PetCardProps> = ({ listing }) => {
+const PetCard: React.FC<PetCardProps> = ({ listing, onClick }) => {
   const getServiceLabel = (type: string) => {
     switch (type) {
       case 'BOARDING': return 'garde chez le pet sitter';
@@ -22,7 +23,10 @@ const PetCard: React.FC<PetCardProps> = ({ listing }) => {
   );
 
   return (
-    <div className="flex-shrink-0 snap-start w-[180px] md:w-[280px] flex flex-col group cursor-pointer">
+    <div 
+      className="flex-shrink-0 snap-start w-[180px] md:w-[280px] flex flex-col group cursor-pointer"
+      onClick={onClick}
+    >
       <div className="flex items-center justify-between w-full mb-4 px-2">
         <div className="flex items-center gap-3 truncate mr-1">
           <img 

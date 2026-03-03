@@ -1,4 +1,5 @@
 @import "tailwindcss";
+@import "mapbox-gl/dist/mapbox-gl.css";
 
 @layer base {
   html, body {
@@ -21,7 +22,9 @@
   --color-warm-paper: #F7F7F7;
   --color-warm-border: #EBEBEB;
   --color-warm-text: #222222;
+  --color-anthracite: #222222;
   --color-neko-primary: #C25E72;
+  --color-neko-rose: #C25E72;
   --color-neko-olive: #5A5A40;
 
   @keyframes float {

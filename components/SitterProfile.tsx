@@ -8,7 +8,7 @@ const StarIconFull = ({ className = "text-[#C25E72]" }: { className?: string }) 
   </svg>
 );
 
-const CheckIcon = ({ className = "text-green-600" }: { className?: string }) => (
+const CheckIcon = ({ className = "text-[#C25E72]" }: { className?: string }) => (
   <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="4" strokeLinecap="round" strokeLinejoin="round" className={className}>
     <polyline points="20 6 9 17 4 12"></polyline>
   </svg>
@@ -220,7 +220,7 @@ const SitterProfile: React.FC<SitterProfileProps> = ({ sitterId, onBack, onMessa
                   <p className="text-[10px] text-[#37352F]/40 font-medium italic">Sélection rigoureuse par nos experts.</p>
                 </div>
                 <div className="flex items-center gap-1.5 px-2 py-1 bg-[#F0F0EF] rounded-md">
-                   <div className="w-1.5 h-1.5 rounded-full bg-green-500"></div>
+                   <div className="w-1.5 h-1.5 rounded-full bg-[#C25E72]"></div>
                    <span className="text-[8px] font-black uppercase tracking-widest text-[#1C1C1B]/40">Garanti</span>
                 </div>
               </div>

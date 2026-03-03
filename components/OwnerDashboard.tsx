@@ -16,10 +16,11 @@ import {
   ChevronRight, 
   Plus, 
   Search,
-  LogOut
+  LogOut,
+  Users
 } from 'lucide-react';
 
-const OwnerDashboard: React.FC<{ onLogout: () => void }> = ({ onLogout }) => {
+const OwnerDashboard: React.FC<{ onLogout: () => void, onMessagesClick?: () => void }> = ({ onLogout, onMessagesClick }) => {
   const [showPublicProfile, setShowPublicProfile] = React.useState(false);
 
   const fadeUp = {
@@ -50,24 +51,20 @@ const OwnerDashboard: React.FC<{ onLogout: () => void }> = ({ onLogout }) => {
             </div>
           </div>
           
-          <div className="bg-warm-paper p-6 rounded-[32px] space-y-4">
+            <div className="bg-warm-paper p-6 rounded-[32px] space-y-4">
             <h2 className="font-bold text-lg">À propos</h2>
             <p className="text-anthracite/70 leading-relaxed">
-              Passionnée par les chats depuis toujours, j'habite dans le 11ème avec mes deux amours Mochi et Yuzu. 
-              Je cherche des personnes de confiance pour prendre soin d'eux pendant mes déplacements professionnels.
+              Passionnée par les chats depuis toujours, j'habite dans le 11ème avec mon amour Mochi. 
+              Je cherche des personnes de confiance pour prendre soin de lui pendant mes déplacements professionnels.
             </p>
           </div>
 
           <div className="space-y-4">
             <h2 className="font-bold text-lg px-2">Ses chats</h2>
-            <div className="grid grid-cols-2 gap-4">
-              <div className="bg-white border border-warm-border p-4 rounded-[24px] text-center">
+            <div className="flex justify-start">
+              <div className="bg-white border border-warm-border p-4 rounded-[24px] text-center w-[140px]">
                 <span className="text-3xl block mb-2">🐈‍⬛</span>
                 <span className="font-bold">Mochi</span>
-              </div>
-              <div className="bg-white border border-warm-border p-4 rounded-[24px] text-center">
-                <span className="text-3xl block mb-2">🐈</span>
-                <span className="font-bold">Yuzu</span>
               </div>
             </div>
           </div>
@@ -78,19 +75,12 @@ const OwnerDashboard: React.FC<{ onLogout: () => void }> = ({ onLogout }) => {
 
   return (
     <div className="min-h-screen bg-white pb-32 font-sans selection:bg-neko-rose/20">
-      {/* 2. Header */}
-      <header className="px-6 py-4 flex justify-between items-center bg-white">
-        <div className="bg-anthracite text-white px-3 py-1.5 rounded-[10px] font-bold text-[18px] tracking-tighter">
-          neko
-        </div>
-      </header>
-
-      <div className="max-w-[390px] mx-auto">
+      <div className="max-w-[390px] mx-auto pt-4">
         {/* 3. Carte Hero — Profil utilisateur */}
         <motion.div 
           {...fadeUp}
           onClick={() => setShowPublicProfile(true)}
-          className="mx-5 my-4 p-5 bg-gradient-to-br from-[#C25E72] to-[#A34A5E] rounded-[32px] text-white shadow-[0_8px_32px_rgba(194,94,114,0.2)] cursor-pointer group"
+          className="mx-5 mb-4 p-5 bg-gradient-to-br from-[#C25E72] to-[#A34A5E] rounded-[32px] text-white shadow-[0_8px_32px_rgba(194,94,114,0.2)] cursor-pointer group"
         >
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-4">
@@ -115,13 +105,13 @@ const OwnerDashboard: React.FC<{ onLogout: () => void }> = ({ onLogout }) => {
           </div>
         </motion.div>
 
-        {/* 4. Section "Annonce en cours" */}
+        {/* 4. Section "Annonce" */}
         <motion.section 
           {...fadeUp}
           transition={{ delay: 0.1 }}
-          className="px-5 pt-6"
+          className="px-5 pt-4"
         >
-          <h2 className="text-[11px] font-bold uppercase tracking-[2px] text-neko-olive mb-3 px-1">Annonce en cours</h2>
+          <h2 className="text-[11px] font-bold uppercase tracking-[2px] text-neko-olive mb-3 px-1">Annonce</h2>
           <div className="bg-white border border-warm-border rounded-[32px] p-5 shadow-[0_4px_16px_rgba(0,0,0,0.07)] hover:border-neko-rose transition-colors cursor-pointer">
             <div className="flex justify-between items-start mb-3">
               <div>
@@ -147,31 +137,59 @@ const OwnerDashboard: React.FC<{ onLogout: () => void }> = ({ onLogout }) => {
           </div>
         </motion.section>
 
+        {/* 5.5 Section "Mes Messages" */}
+        <motion.section 
+          {...fadeUp}
+          transition={{ delay: 0.15 }}
+          className="px-5 pt-8"
+        >
+          <h2 className="text-[10px] font-bold uppercase tracking-[2px] text-neko-olive mb-2 px-1">Mes Messages</h2>
+          <div className="bg-white border border-warm-border rounded-[24px] overflow-hidden shadow-[0_4px_12px_rgba(0,0,0,0.05)]">
+            <div 
+              onClick={onMessagesClick}
+              className="flex items-center gap-3 px-4 py-3 cursor-pointer hover:bg-[#FFF0F2] transition-colors"
+            >
+              <div className="w-9 h-9 bg-warm-paper rounded-lg flex items-center justify-center text-anthracite">
+                <MessageCircle size={16} />
+              </div>
+              <div className="flex-1">
+                <span className="text-[13px] font-bold block">Messages</span>
+                <p className="text-[11px] text-neko-olive mt-0.5">3 nouvelles discussions</p>
+              </div>
+              <div className="bg-neko-rose text-white px-2 py-0.5 rounded-full text-[10px] font-bold">
+                3
+              </div>
+              <ChevronRight size={16} className="text-warm-border" />
+            </div>
+          </div>
+        </motion.section>
+
         {/* 5. Section "Mes chats" */}
         <motion.section 
           {...fadeUp}
           transition={{ delay: 0.2 }}
           className="px-5 pt-8"
         >
-          <h2 className="text-[11px] font-bold uppercase tracking-[2px] text-neko-olive mb-3 px-1">Mes chats</h2>
-          <div className="grid grid-cols-2 gap-3 mb-4">
+          <h2 className="text-[10px] font-bold uppercase tracking-[2px] text-neko-olive mb-2 px-1">Mes chats</h2>
+          <div className="flex items-center gap-3">
             {[
-              { name: 'Mochi', breed: 'British Shorthair', emoji: '🐈‍⬛', age: '2 ans' },
-              { name: 'Yuzu', breed: 'Européen', emoji: '🐈', age: '4 ans' }
+              { name: 'Mochi', breed: 'British Shorthair', emoji: '🐈‍⬛', age: '2 ans' }
             ].map((chat, i) => (
-              <div key={i} className="bg-warm-paper rounded-[32px] p-4 text-center hover:scale-[1.02] transition-transform cursor-pointer">
-                <span className="text-[32px] mb-2 block">{chat.emoji}</span>
-                <span className="text-[15px] font-bold block">{chat.name}</span>
-                <span className="text-[12px] text-neko-olive block mb-3">{chat.breed}</span>
-                <div className="bg-[#FFF0F2] text-neko-rose px-4 py-1.5 rounded-full text-[12px] font-bold inline-block">
-                  {chat.age} · Fiche
+              <div key={i} className="bg-warm-paper rounded-[16px] px-3 py-2 flex items-center gap-3 hover:scale-[1.02] transition-transform cursor-pointer w-fit min-w-[160px]">
+                <span className="text-[24px]">{chat.emoji}</span>
+                <div className="text-left">
+                  <span className="text-[13px] font-bold block leading-tight">{chat.name}</span>
+                  <span className="text-[10px] text-neko-olive block">{chat.breed}</span>
+                </div>
+                <div className="ml-2 bg-[#FFF0F2] text-neko-rose px-2 py-0.5 rounded-full text-[9px] font-bold">
+                  {chat.age}
                 </div>
               </div>
             ))}
+            <button className="h-[48px] px-4 border-1 border-dashed border-neko-rose rounded-[16px] text-neko-rose font-bold text-[12px] hover:bg-[#FFF0F2] transition-colors flex items-center justify-center gap-1.5">
+              <Plus size={14} /> Ajouter
+            </button>
           </div>
-          <button className="w-full py-3.5 border-1.5 border-dashed border-neko-rose rounded-full text-neko-rose font-bold text-[14px] hover:bg-[#FFF0F2] transition-colors flex items-center justify-center gap-2">
-            <Plus size={18} /> Ajouter un chat
-          </button>
         </motion.section>
 
         {/* 6. Section "Mon espace" */}
@@ -184,7 +202,6 @@ const OwnerDashboard: React.FC<{ onLogout: () => void }> = ({ onLogout }) => {
           <div className="bg-white border border-warm-border rounded-[32px] overflow-hidden shadow-[0_4px_16px_rgba(0,0,0,0.07)]">
             {[
               { icon: <ClipboardList size={18} />, label: 'Mes annonces', desc: 'Historique & annonces passées' },
-              { icon: <MessageCircle size={18} />, label: 'Messages', badge: 3 },
               { icon: <Heart size={18} />, label: 'Pet sitters favoris', desc: 'Sauvegardés & notés' },
               { icon: <CreditCard size={18} />, label: 'Paiements', desc: 'Moyens de paiement · Factures' }
             ].map((item, i) => (
@@ -196,11 +213,6 @@ const OwnerDashboard: React.FC<{ onLogout: () => void }> = ({ onLogout }) => {
                   <span className="text-[14px] font-bold block">{item.label}</span>
                   {item.desc && <p className="text-[12px] text-neko-olive mt-0.5">{item.desc}</p>}
                 </div>
-                {item.badge && (
-                  <div className="bg-neko-rose text-white px-2 py-0.5 rounded-full text-[11px] font-bold">
-                    {item.badge}
-                  </div>
-                )}
                 <ChevronRight size={20} className="text-warm-border" />
               </div>
             ))}
@@ -217,6 +229,7 @@ const OwnerDashboard: React.FC<{ onLogout: () => void }> = ({ onLogout }) => {
           <div className="bg-white border border-warm-border rounded-[32px] overflow-hidden shadow-[0_4px_16px_rgba(0,0,0,0.07)]">
             {[
               { icon: <User size={18} />, label: 'Informations personnelles' },
+              { icon: <Users size={18} />, label: 'Parrainer des amis' },
               { icon: <Bell size={18} />, label: 'Notifications', value: 'Activées' },
               { icon: <Shield size={18} />, label: 'Sécurité du compte' },
               { icon: <HelpCircle size={18} />, label: 'Aide & contact' }
@@ -246,31 +259,37 @@ const OwnerDashboard: React.FC<{ onLogout: () => void }> = ({ onLogout }) => {
         </div>
       </div>
 
-      {/* 9. Barre de navigation fixe */}
-      <nav className="fixed bottom-0 left-0 right-0 h-[84px] bg-white border-t border-warm-border flex justify-around items-center px-2 pb-5 z-[100]">
+      {/* 9. Barre de navigation fixe — Taille réduite & Blur */}
+      <nav className="fixed bottom-0 left-0 right-0 h-[68px] bg-[#C25E72]/85 backdrop-blur-xl border-t border-white/20 flex justify-around items-center px-4 pb-2 z-[100] shadow-[0_-8px_32px_rgba(0,0,0,0.2)]">
         {[
-          { icon: <Search size={24} />, label: 'Rechercher' },
-          { icon: <Heart size={24} />, label: 'Favoris', badge: 2 },
-          { icon: <Plus size={28} />, label: 'Publier', center: true },
-          { icon: <MessageCircle size={24} />, label: 'Messages', badge: 3 },
-          { icon: <User size={24} />, label: 'Compte', active: true }
+          { icon: <Search size={20} />, label: 'Rechercher' },
+          { icon: <Heart size={20} />, label: 'Favoris', badge: 2 },
+          { icon: <Plus size={24} />, label: 'Publier', center: true },
+          { icon: <MessageCircle size={20} />, label: 'Messages', badge: 3, onClick: onMessagesClick },
+          { icon: <User size={20} />, label: 'Compte', active: true }
         ].map((item, i) => (
-          <div key={i} className={`flex flex-col items-center gap-1 cursor-pointer transition-all ${item.active ? 'text-neko-rose' : 'text-anthracite opacity-40'} ${item.center ? 'relative' : ''}`}>
+          <div 
+            key={i} 
+            onClick={() => item.onClick?.()}
+            className={`flex flex-col items-center gap-0.5 cursor-pointer transition-all ${item.active ? 'text-white' : 'text-white/60'} ${item.center ? 'relative' : ''}`}
+          >
             {item.center ? (
-              <div className="w-14 h-14 bg-neko-rose rounded-full flex items-center justify-center text-white -mt-10 shadow-[0_8px_24px_rgba(194,94,114,0.4)] hover:scale-110 transition-transform">
+              <div className="w-12 h-12 bg-white rounded-full flex items-center justify-center text-[#C25E72] -mt-8 shadow-[0_8px_24px_rgba(0,0,0,0.3)] hover:scale-110 transition-transform">
                 {item.icon}
               </div>
             ) : (
-              <div className="relative">
-                {item.icon}
+              <div className="relative flex flex-col items-center">
+                <div className={`p-1.5 rounded-xl transition-colors ${item.active ? 'bg-white/20' : ''}`}>
+                  {item.icon}
+                </div>
                 {item.badge && (
-                  <div className="absolute -top-1 -right-1 w-4 h-4 bg-neko-rose text-white text-[9px] font-bold rounded-full flex items-center justify-center border-2 border-white">
+                  <div className="absolute top-0.5 right-0.5 w-3.5 h-3.5 bg-white text-[#C25E72] text-[8px] font-bold rounded-full flex items-center justify-center border-2 border-[#C25E72]">
                     {item.badge}
                   </div>
                 )}
               </div>
             )}
-            {!item.center && <span className="text-[10px] font-bold">{item.label}</span>}
+            {!item.center && <span className={`text-[8px] font-bold tracking-tight ${item.active ? 'text-white' : 'text-white/60'}`}>{item.label}</span>}
           </div>
         ))}
       </nav>

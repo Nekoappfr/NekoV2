@@ -9,12 +9,16 @@ import FAQSection from './components/FAQSection';
 import SmartCTA from './components/SmartCTA';
 import TrustBar from './components/TrustBar';
 import SitterRegistration from './components/SitterRegistration';
-import PostAd from './components/PostAd';
+import BookingDropdown from './components/BookingDropdown';
 import OwnerDashboard from './components/OwnerDashboard';
 import SitterDashboard from './components/SitterDashboard';
 import RoleSelection from './components/RoleSelection';
-import SitterProfile from './components/SitterProfile';
+import SitterProfile from './components/NewSitterProfile';
+import ListingDetail from './components/ListingDetail';
+import MessagesScreen from './components/MessagesScreen';
+import PetSitterListing from './components/PetSitterListing';
 import AuthModal from './components/AuthModal';
+import { Search, PlusCircle, User } from 'lucide-react';
 import { PricingTabType } from './types';
 import { MOCK_LISTINGS } from './constants';
 
@@ -37,7 +41,7 @@ const MagnifyingEyeIcon = () => (
   </svg>
 );
 
-export type ViewState = 'home' | 'register-sitter' | 'lead_capture' | 'owner_dashboard' | 'sitter_dashboard' | 'messages' | 'role_selection' | 'sitter_profile';
+export type ViewState = 'home' | 'register-sitter' | 'lead_capture' | 'owner_dashboard' | 'sitter_dashboard' | 'messages' | 'role_selection' | 'sitter_profile' | 'sitter_listing' | 'pricing' | 'selection_process' | 'sitter_charter' | 'owner_charter' | 'listing_detail';
 
 const Header: React.FC<{ onAction: (intent: 'login' | 'join') => void, onViewChange: (v: ViewState) => void }> = ({ onAction, onViewChange }) => {
   return (
@@ -48,6 +52,12 @@ const Header: React.FC<{ onAction: (intent: 'login' | 'join') => void, onViewCha
       </div>
       
       <nav className="hidden md:flex items-center gap-10">
+        <button 
+          onClick={() => onViewChange('sitter_listing')}
+          className="text-[14px] font-semibold text-warm-text/70 hover:text-warm-text transition-colors"
+        >
+          Explorer
+        </button>
         <a href="#" className="text-[14px] font-semibold text-warm-text/70 hover:text-warm-text transition-colors">Communautés</a>
         <a href="#" className="text-[14px] font-semibold text-warm-text/70 hover:text-warm-text transition-colors">Sécurité</a>
         <button 
@@ -81,43 +91,36 @@ const MobileBottomNav: React.FC<{ onViewChange: (view: ViewState) => void, curre
 
   return (
     <div className="md:hidden fixed bottom-0 left-0 right-0 z-[100] pointer-events-auto">
-      <nav className="w-full h-[64px] bg-white/90 backdrop-blur-xl border-t border-warm-border flex items-center justify-around px-2 shadow-[0_-4px_20px_rgba(0,0,0,0.04)]">
+      <nav className="w-full h-[72px] bg-white/95 backdrop-blur-xl border-t border-warm-border flex items-center justify-around px-4 shadow-[0_-8px_30px_rgba(0,0,0,0.08)] pb-safe">
         
         <button 
-          className={`relative flex flex-col items-center justify-center flex-1 h-full transition-all duration-300 active:scale-95 text-[#1C1C1B]/40`}
+          onClick={() => onViewChange('sitter_listing')}
+          className={`relative flex flex-col items-center justify-center flex-1 h-full transition-all duration-300 active:scale-90 ${isActive('sitter_listing') ? 'text-neko-rose' : 'text-warm-text/40'}`}
         >
-          <div className="p-1 transition-all duration-500">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-              <circle cx="11" cy="11" r="8" />
-              <line x1="21" x2="16.65" y2="16.65" />
-            </svg>
+          <div className={`p-1.5 rounded-xl transition-all duration-300 ${isActive('sitter_listing') ? 'bg-neko-rose/10' : ''}`}>
+            <Search className={`w-6 h-6 ${isActive('sitter_listing') ? 'stroke-[2.5px]' : 'stroke-[2px]'}`} />
           </div>
-          <span className="text-[8px] font-bold uppercase tracking-[0.05em] mt-0.5 opacity-60">Explorer</span>
+          <span className={`text-[10px] font-bold tracking-tight mt-1 ${isActive('sitter_listing') ? 'text-neko-rose' : 'text-warm-text/60'}`}>Explorer</span>
         </button>
 
         <button 
           onClick={() => onViewChange('lead_capture')}
-          className={`relative flex flex-col items-center justify-center flex-1 h-full transition-all duration-300 active:scale-95 text-[#1C1C1B]/40`}
+          className={`relative flex flex-col items-center justify-center flex-1 h-full transition-all duration-300 active:scale-90 ${isActive('lead_capture') ? 'text-neko-rose' : 'text-warm-text/40'}`}
         >
-          <div className="p-1 transition-all duration-500">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-              <path d="M12 5v14M5 12h14" />
-            </svg>
+          <div className={`p-1.5 rounded-xl transition-all duration-300 ${isActive('lead_capture') ? 'bg-neko-rose/10' : ''}`}>
+            <PlusCircle className={`w-6 h-6 ${isActive('lead_capture') ? 'stroke-[2.5px]' : 'stroke-[2px]'}`} />
           </div>
-          <span className="text-[8px] font-bold uppercase tracking-[0.05em] mt-0.5 opacity-60">List my ad</span>
+          <span className={`text-[10px] font-bold tracking-tight mt-1 ${isActive('lead_capture') ? 'text-neko-rose' : 'text-warm-text/60'}`}>Publier</span>
         </button>
 
         <button 
           onClick={() => onAction('login')}
-          className={`relative flex flex-col items-center justify-center flex-1 h-full transition-all duration-300 active:scale-95 text-[#1C1C1B]/40`}
+          className={`relative flex flex-col items-center justify-center flex-1 h-full transition-all duration-300 active:scale-90 ${isActive('role_selection') || isActive('owner_dashboard') || isActive('sitter_dashboard') ? 'text-neko-rose' : 'text-warm-text/40'}`}
         >
-          <div className={`p-1 transition-all duration-500`}>
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-              <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
-              <circle cx="12" cy="7" r="4" />
-            </svg>
+          <div className={`p-1.5 rounded-xl transition-all duration-300 ${isActive('role_selection') || isActive('owner_dashboard') || isActive('sitter_dashboard') ? 'bg-neko-rose/10' : ''}`}>
+            <User className={`w-6 h-6 ${isActive('role_selection') || isActive('owner_dashboard') || isActive('sitter_dashboard') ? 'stroke-[2.5px]' : 'stroke-[2px]'}`} />
           </div>
-          <span className={`text-[8px] font-bold uppercase tracking-[0.05em] mt-0.5 transition-all duration-300 opacity-60`}>Log in</span>
+          <span className={`text-[10px] font-bold tracking-tight mt-1 ${isActive('role_selection') || isActive('owner_dashboard') || isActive('sitter_dashboard') ? 'text-neko-rose' : 'text-warm-text/60'}`}>Connexion</span>
         </button>
 
       </nav>
@@ -129,9 +132,11 @@ const App: React.FC = () => {
   const [viewState, setViewState] = useState<ViewState>('home');
   const [activePricingTab, setActivePricingTab] = useState<PricingTabType>('boarding');
   const [authIntent, setAuthIntent] = useState<'login' | 'join'>('join');
+  const [selectedRole, setSelectedRole] = useState<'owner' | 'sitter' | null>(null);
   const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
   const [isSearchActive, setIsSearchActive] = useState(false);
   const [selectedSitterId, setSelectedSitterId] = useState<string | null>(null);
+  const [selectedListingId, setSelectedListingId] = useState<string | null>(null);
   const [isSticky, setIsSticky] = useState(false);
   
   const heroSearchRef = useRef<HTMLDivElement>(null);
@@ -172,19 +177,24 @@ const App: React.FC = () => {
 
   const handleAuthSuccess = () => {
     setIsAuthModalOpen(false);
-    setViewState('role_selection');
+    if (authIntent === 'login' && selectedRole) {
+      if (selectedRole === 'sitter') setViewState('sitter_dashboard');
+      else setViewState('owner_dashboard');
+    } else {
+      setViewState('role_selection');
+    }
   };
 
   const handleRoleChosen = (role: 'owner' | 'sitter') => {
-    if (role === 'sitter') {
-      if (authIntent === 'login') {
-        setViewState('sitter_dashboard');
-      } else {
-        setViewState('register-sitter');
-      }
+    if (authIntent === 'login') {
+      setSelectedRole(role);
+      setIsAuthModalOpen(true);
     } else {
-      if (authIntent === 'join') setViewState('lead_capture');
-      else setViewState('owner_dashboard');
+      if (role === 'sitter') {
+        setViewState('register-sitter');
+      } else {
+        setViewState('lead_capture');
+      }
     }
   };
 
@@ -197,6 +207,11 @@ const App: React.FC = () => {
   const handleSitterClick = (id: string) => {
     setSelectedSitterId(id);
     setViewState('sitter_profile');
+  };
+
+  const handleListingClick = (id: string) => {
+    setSelectedListingId(id);
+    setViewState('listing_detail');
   };
 
   const renderMainContent = () => {
@@ -213,17 +228,166 @@ const App: React.FC = () => {
         <SitterProfile 
           sitterId={selectedSitterId}
           onBack={() => setViewState('home')} 
-          onMessageRequest={() => setViewState('messages')}
         />
       );
     }
 
-    if (viewState === 'owner_dashboard' || viewState === 'messages') {
-      return <OwnerDashboard onLogout={() => setViewState('home')} />;
+    if (viewState === 'listing_detail') {
+      return (
+        <ListingDetail 
+          listingId={selectedListingId}
+          onBack={() => setViewState('home')} 
+        />
+      );
+    }
+
+    if (viewState === 'owner_dashboard') {
+      return <OwnerDashboard onLogout={() => setViewState('home')} onMessagesClick={() => setViewState('messages')} />;
+    }
+
+    if (viewState === 'messages') {
+      return <MessagesScreen onBack={() => setViewState('owner_dashboard')} />;
     }
 
     if (viewState === 'sitter_dashboard') {
       return <SitterDashboard onLogout={() => setViewState('home')} />;
+    }
+
+    if (viewState === 'sitter_listing') {
+      return (
+        <PetSitterListing 
+          onBack={() => setViewState('home')} 
+          onSitterClick={handleSitterClick}
+        />
+      );
+    }
+
+    if (viewState === 'pricing') {
+      return (
+        <div className="pt-12 pb-24 px-4 md:px-8 max-w-7xl mx-auto">
+          <button onClick={() => setViewState('home')} className="mb-8 text-warm-text/40 hover:text-warm-text font-bold flex items-center gap-2">
+            ← Retour
+          </button>
+          <PricingSection activeTab={activePricingTab} setActiveTab={setActivePricingTab} />
+        </div>
+      );
+    }
+
+    if (viewState === 'selection_process') {
+      return (
+        <div className="pt-20 pb-32 px-6 md:px-12 max-w-4xl mx-auto">
+          <button onClick={() => setViewState('home')} className="mb-12 text-warm-text/40 hover:text-warm-text font-bold flex items-center gap-2">
+            ← Retour
+          </button>
+          <h1 className="text-[40px] md:text-[56px] font-bold text-warm-text leading-tight tracking-tight mb-8">
+            Comment sont sélectionnés nos pet sitters ?
+          </h1>
+          <div className="space-y-12">
+            <section className="space-y-4">
+              <h2 className="text-[24px] font-bold text-warm-text">1. Vérification d'identité</h2>
+              <p className="text-[18px] text-warm-text/60 leading-relaxed">
+                Chaque sitter doit fournir une pièce d'identité officielle en cours de validité. Nous vérifions manuellement chaque document pour garantir l'authenticité des profils.
+              </p>
+            </section>
+            <section className="space-y-4">
+              <h2 className="text-[24px] font-bold text-warm-text">2. Entretien et Questionnaire</h2>
+              <p className="text-[18px] text-warm-text/60 leading-relaxed">
+                Les candidats répondent à un questionnaire détaillé sur leur expérience avec les chats, leurs connaissances en comportement félin et leur capacité à gérer des situations d'urgence.
+              </p>
+            </section>
+            <section className="space-y-4">
+              <h2 className="text-[24px] font-bold text-warm-text">3. Validation de l'environnement</h2>
+              <p className="text-[18px] text-warm-text/60 leading-relaxed">
+                Pour les gardes en famille d'accueil, nous demandons des photos de l'environnement pour nous assurer qu'il est sécurisé et adapté à l'accueil d'un chat.
+              </p>
+            </section>
+            <section className="space-y-4">
+              <h2 className="text-[24px] font-bold text-warm-text">4. Système de recommandation</h2>
+              <p className="text-[18px] text-warm-text/60 leading-relaxed">
+                La communauté Neko repose sur la confiance. Les sitters sont évalués après chaque prestation. Un score de confiance élevé est nécessaire pour rester actif sur la plateforme.
+              </p>
+            </section>
+          </div>
+        </div>
+      );
+    }
+
+    if (viewState === 'sitter_charter') {
+      return (
+        <div className="pt-20 pb-32 px-6 md:px-12 max-w-4xl mx-auto">
+          <button onClick={() => setViewState('home')} className="mb-12 text-warm-text/40 hover:text-warm-text font-bold flex items-center gap-2">
+            ← Retour
+          </button>
+          <h1 className="text-[40px] md:text-[56px] font-bold text-warm-text leading-tight tracking-tight mb-8">
+            Charte du Pet Sitter Neko
+          </h1>
+          <div className="space-y-12">
+            <section className="space-y-4">
+              <h2 className="text-[24px] font-bold text-warm-text">Bien-être animal avant tout</h2>
+              <p className="text-[18px] text-warm-text/60 leading-relaxed">
+                Le sitter s'engage à traiter chaque chat avec patience, douceur et respect. Il doit veiller à son alimentation, son hygiène et son besoin d'affection.
+              </p>
+            </section>
+            <section className="space-y-4">
+              <h2 className="text-[24px] font-bold text-warm-text">Fiabilité et Ponctualité</h2>
+              <p className="text-[18px] text-warm-text/60 leading-relaxed">
+                Le sitter respecte scrupuleusement les horaires convenus et les consignes spécifiques données par le propriétaire.
+              </p>
+            </section>
+            <section className="space-y-4">
+              <h2 className="text-[24px] font-bold text-warm-text">Communication transparente</h2>
+              <p className="text-[18px] text-warm-text/60 leading-relaxed">
+                Le sitter envoie régulièrement des nouvelles (photos/vidéos) et informe immédiatement le propriétaire en cas de comportement inhabituel ou d'urgence.
+              </p>
+            </section>
+            <section className="space-y-4">
+              <h2 className="text-[24px] font-bold text-warm-text">Respect de la vie privée</h2>
+              <p className="text-[18px] text-warm-text/60 leading-relaxed">
+                Lors de visites à domicile, le sitter respecte l'intimité du propriétaire et ne s'autorise aucun usage non prévu des lieux.
+              </p>
+            </section>
+          </div>
+        </div>
+      );
+    }
+
+    if (viewState === 'owner_charter') {
+      return (
+        <div className="pt-20 pb-32 px-6 md:px-12 max-w-4xl mx-auto">
+          <button onClick={() => setViewState('home')} className="mb-12 text-warm-text/40 hover:text-warm-text font-bold flex items-center gap-2">
+            ← Retour
+          </button>
+          <h1 className="text-[40px] md:text-[56px] font-bold text-warm-text leading-tight tracking-tight mb-8">
+            Charte du Propriétaire Neko
+          </h1>
+          <div className="space-y-12">
+            <section className="space-y-4">
+              <h2 className="text-[24px] font-bold text-warm-text">Transparence totale</h2>
+              <p className="text-[18px] text-warm-text/60 leading-relaxed">
+                Le propriétaire fournit toutes les informations nécessaires sur la santé, le caractère et les habitudes de son chat pour garantir une garde sereine.
+              </p>
+            </section>
+            <section className="space-y-4">
+              <h2 className="text-[24px] font-bold text-warm-text">Environnement et Matériel</h2>
+              <p className="text-[18px] text-warm-text/60 leading-relaxed">
+                Le propriétaire s'assure que le sitter dispose de tout le nécessaire (nourriture, litière, carnet de santé, coordonnées vétérinaires).
+              </p>
+            </section>
+            <section className="space-y-4">
+              <h2 className="text-[24px] font-bold text-warm-text">Respect du Sitter</h2>
+              <p className="text-[18px] text-warm-text/60 leading-relaxed">
+                Le propriétaire respecte le travail du sitter, ses horaires et s'engage à une communication courtoise et réactive.
+              </p>
+            </section>
+            <section className="space-y-4">
+              <h2 className="text-[24px] font-bold text-warm-text">Engagement financier</h2>
+              <p className="text-[18px] text-warm-text/60 leading-relaxed">
+                Le propriétaire s'engage à régler la prestation via la plateforme selon les modalités convenues lors de la réservation.
+              </p>
+            </section>
+          </div>
+        </div>
+      );
     }
 
     return (
@@ -284,7 +448,7 @@ const App: React.FC = () => {
                       referrerPolicy="no-referrer"
                     />
                     {i === 1 && (
-                      <span className="absolute bottom-0 right-0 w-2.5 h-2.5 bg-emerald-500 border-2 border-white rounded-full animate-pulse"></span>
+                      <span className="absolute bottom-0 right-0 w-2.5 h-2.5 bg-neko-rose border-2 border-white rounded-full animate-pulse"></span>
                     )}
                   </div>
                 ))}
@@ -307,16 +471,37 @@ const App: React.FC = () => {
               <div className="flex items-center justify-between">
                 <h2 className="text-[24px] md:text-[32px] font-bold text-warm-text leading-tight tracking-tight">Demandes en cours</h2>
               </div>
-              <Carousel />
+              <Carousel onListingClick={handleListingClick} />
             </section>
             
             <div className="bg-warm-paper rounded-[48px] py-24 px-4 md:px-12">
               <HowItWorks />
             </div>
 
-            <section className="space-y-8">
-              <h2 className="text-[24px] md:text-[32px] font-bold text-warm-text leading-tight tracking-tight">Nos sitters à proximité</h2>
-              <SitterList onSitterClick={handleSitterClick} />
+            <section className="space-y-12">
+              <div className="space-y-8">
+                <h2 className="text-[24px] md:text-[32px] font-bold text-warm-text leading-tight tracking-tight">Nos sitters à proximité</h2>
+                <SitterList onSitterClick={handleSitterClick} />
+              </div>
+              
+              <div className="flex flex-col items-center gap-6 pt-4">
+                <button 
+                  onClick={() => setViewState('sitter_listing')}
+                  className="group relative inline-flex items-center justify-center px-10 py-5 font-bold text-white transition-all duration-300 bg-neko-rose rounded-[24px] hover:bg-neko-rose/90 shadow-2xl hover:shadow-neko-rose/20 hover:-translate-y-1 active:scale-95 overflow-hidden"
+                >
+                  <span className="relative z-10 flex items-center gap-3 text-[16px] md:text-[18px]">
+                    Trouver mon sitter idéal
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" className="group-hover:translate-x-1 transition-transform">
+                      <path d="M5 12h14M12 5l7 7-7 7" />
+                    </svg>
+                  </span>
+                  <div className="absolute inset-0 bg-gradient-to-r from-white/0 via-white/10 to-white/0 -translate-x-full group-hover:translate-x-full transition-transform duration-1000"></div>
+                </button>
+                <p className="text-[14px] font-medium text-warm-text/40 flex items-center gap-2">
+                  <span className="w-1.5 h-1.5 rounded-full bg-neko-rose animate-pulse"></span>
+                  +120 sitters disponibles cette semaine
+                </p>
+              </div>
             </section>
 
             <section className="bg-white border border-warm-border rounded-[48px] p-8 md:p-12 shadow-2xl">
@@ -350,7 +535,7 @@ const App: React.FC = () => {
         </div>
       </div>
 
-      {viewState !== 'owner_dashboard' && viewState !== 'sitter_dashboard' && viewState !== 'messages' && viewState !== 'role_selection' && !isSearchActive && (
+      {viewState !== 'owner_dashboard' && viewState !== 'sitter_dashboard' && viewState !== 'messages' && viewState !== 'role_selection' && viewState !== 'sitter_listing' && viewState !== 'lead_capture' && !isSearchActive && (
         <Header onAction={handleActionClick} onViewChange={setViewState} />
       )}
       
@@ -360,18 +545,19 @@ const App: React.FC = () => {
         isOpen={isAuthModalOpen} 
         onClose={() => setIsAuthModalOpen(false)} 
         intent={authIntent}
+        setIntent={setAuthIntent}
         onSuccess={handleAuthSuccess}
       />
 
-      {viewState !== 'lead_capture' && viewState !== 'role_selection' && !isSearchActive && (
+      {viewState !== 'lead_capture' && viewState !== 'role_selection' && viewState !== 'owner_dashboard' && viewState !== 'sitter_dashboard' && viewState !== 'messages' && viewState !== 'sitter_listing' && !isSearchActive && (
         <MobileBottomNav onViewChange={setViewState} currentView={viewState} onAction={handleActionClick} />
       )}
 
       {viewState === 'lead_capture' && (
-        <PostAd onBack={() => setViewState('home')} />
+        <BookingDropdown onClose={() => setViewState('home')} onDatesSelected={() => {}} />
       )}
 
-      {viewState !== 'owner_dashboard' && viewState !== 'sitter_dashboard' && viewState !== 'messages' && viewState !== 'role_selection' && !isSearchActive && (
+      {viewState !== 'owner_dashboard' && viewState !== 'sitter_dashboard' && viewState !== 'messages' && viewState !== 'role_selection' && viewState !== 'sitter_listing' && !isSearchActive && (
         <footer className="bg-warm-text border-t border-neko-primary/10 pt-20 pb-12 w-full px-4 md:px-6 lg:px-12">
           <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-4 lg:grid-cols-5 gap-12">
             <div className="col-span-1 md:col-span-2 space-y-8">
@@ -382,21 +568,21 @@ const App: React.FC = () => {
               <p className="text-[16px] text-white/60 max-w-[360px] leading-relaxed font-light">
                 Le réseau parisien le plus fiable pour les propriétaires et sitters de chats. Rejoignez des milliers de voisins vérifiés.
               </p>
-              <div className="md:hidden pt-4">
-                <button 
-                  onClick={() => handleActionClick('join')}
-                  className="btn-primary w-full py-5 text-[16px] shadow-2xl"
-                >
-                  Rejoindre Neko
-                </button>
-              </div>
             </div>
             <div className="space-y-6">
               <h4 className="text-[11px] font-semibold text-white/40 uppercase tracking-[0.2em]">Plateforme</h4>
               <ul className="text-[14px] space-y-4 text-white/80 font-medium">
+                <li><button onClick={() => setViewState('sitter_listing')} className="hover:text-neko-primary transition-colors text-left">Explorer les sitters</button></li>
                 <li><button onClick={() => setViewState('register-sitter')} className="hover:text-neko-primary transition-colors text-left">Devenir Sitter</button></li>
-                <li><button onClick={() => setViewState('register-sitter')} className="hover:text-neko-primary transition-colors text-left">Garde de Maison</button></li>
-                <li><a href="#" className="hover:text-neko-primary transition-colors">Politique d'Assurance</a></li>
+                <li><button onClick={() => setViewState('pricing')} className="hover:text-neko-primary transition-colors text-left">Tarifs</button></li>
+                <li><button onClick={() => setViewState('selection_process')} className="hover:text-neko-primary transition-colors text-left">Sélection des sitters</button></li>
+              </ul>
+            </div>
+            <div className="space-y-6">
+              <h4 className="text-[11px] font-semibold text-white/40 uppercase tracking-[0.2em]">Chartes</h4>
+              <ul className="text-[14px] space-y-4 text-white/80 font-medium">
+                <li><button onClick={() => setViewState('sitter_charter')} className="hover:text-neko-primary transition-colors text-left">Charte du Pet Sitter</button></li>
+                <li><button onClick={() => setViewState('owner_charter')} className="hover:text-neko-primary transition-colors text-left">Charte du Propriétaire</button></li>
               </ul>
             </div>
           </div>

@@ -1,7 +1,10 @@
 
 import React, { useState, useMemo } from 'react';
+import { X, Camera } from 'lucide-react';
+import Cropper from 'react-easy-crop';
+import { getCroppedImg } from '../src/utils/cropImage';
 
-type OverlayState = 'search' | 'account' | 'success';
+type OverlayState = 'search' | 'preview' | 'account' | 'success';
 type CareType = 'sitter' | 'home' | 'visits';
 type ActiveSection = 'dates' | 'location' | 'pet';
 type DateSubTab = 'dates' | 'flexible';
@@ -24,8 +27,17 @@ const BookingDropdown: React.FC<BookingDropdownProps> = ({ onClose, onDatesSelec
   const [visitFrequency, setVisitFrequency] = useState<1 | 2>(1);
   const [petName, setPetName] = useState('');
   const [description, setDescription] = useState('');
+  const [petPhotos, setPetPhotos] = useState<string[]>([]);
   const [isNeutered, setIsNeutered] = useState(false);
   const [isChipped, setIsChipped] = useState(false);
+
+  // Cropper State
+  const [imageToCrop, setImageToCrop] = useState<string | null>(null);
+  const [crop, setCrop] = useState({ x: 0, y: 0 });
+  const [zoom, setZoom] = useState(1);
+  const [rotation, setRotation] = useState(0);
+  const [croppedAreaPixels, setCroppedAreaPixels] = useState<any>(null);
+  const [croppingIndex, setCroppingIndex] = useState<number | null>(null);
 
   const today = new Date();
   
@@ -80,7 +92,7 @@ const BookingDropdown: React.FC<BookingDropdownProps> = ({ onClose, onDatesSelec
   // Validation Checkers
   const areDatesValid = () => (startDate && endDate) || dateSubTab === 'flexible';
   const isLocationValid = () => address.trim().length > 5 && careType !== null;
-  const isPetValid = () => petName.trim().length > 0;
+  const isPetValid = () => petName.trim().length > 0 && petPhotos.length > 0;
 
   // Price Estimation Logic
   const priceDetails = useMemo(() => {
@@ -127,24 +139,67 @@ const BookingDropdown: React.FC<BookingDropdownProps> = ({ onClose, onDatesSelec
     setActiveSection('dates');
   };
 
-  const handleNext = () => {
-    if (activeSection === 'dates' && areDatesValid()) {
-      setActiveSection('location');
-    } else if (activeSection === 'location' && isLocationValid()) {
-      setActiveSection('pet');
-    } else if (activeSection === 'pet') {
-      if (areDatesValid() && isLocationValid() && isPetValid()) {
-        setOverlayState('account');
+  const handlePhotoUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const files = e.target.files;
+    if (files && files[0]) {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setImageToCrop(reader.result as string);
+        setCroppingIndex(null); // New photo
+      };
+      reader.readAsDataURL(files[0]);
+    }
+  };
+
+  const onCropComplete = (_: any, pixels: any) => {
+    setCroppedAreaPixels(pixels);
+  };
+
+  const saveCroppedImage = async () => {
+    if (imageToCrop && croppedAreaPixels) {
+      try {
+        const croppedImage = await getCroppedImg(imageToCrop, croppedAreaPixels, rotation);
+        if (croppingIndex !== null) {
+          setPetPhotos(prev => {
+            const next = [...prev];
+            next[croppingIndex] = croppedImage;
+            return next;
+          });
+        } else {
+          setPetPhotos(prev => [...prev, croppedImage]);
+        }
+        setImageToCrop(null);
+        setCroppingIndex(null);
+      } catch (e) {
+        console.error(e);
       }
     }
   };
+
+  const removePhoto = (index: number) => {
+    setPetPhotos(prev => prev.filter((_, i) => i !== index));
+  };
+
+  const handleNext = () => {
+    if (activeSection === 'location' && isLocationValid()) {
+      setActiveSection('dates');
+    } else if (activeSection === 'dates' && areDatesValid()) {
+      setActiveSection('pet');
+    } else if (activeSection === 'pet' && isPetValid()) {
+      setOverlayState('preview');
+    }
+  };
+
+  React.useEffect(() => {
+    // Timer removed as per user request
+  }, [overlayState]);
 
   const canProceed = useMemo(() => {
     if (activeSection === 'dates') return areDatesValid();
     if (activeSection === 'location') return isLocationValid();
     if (activeSection === 'pet') return isPetValid();
     return false;
-  }, [activeSection, startDate, endDate, dateSubTab, address, careType, petName]);
+  }, [activeSection, startDate, endDate, dateSubTab, address, careType, petName, petPhotos]);
 
   const renderMonth = (monthDate: Date) => (
     <div key={monthDate.toISOString()} className="mb-6 px-1">
@@ -234,6 +289,79 @@ const BookingDropdown: React.FC<BookingDropdownProps> = ({ onClose, onDatesSelec
         <h2 className="text-[20px] font-bold text-[#1C1C1B] mb-2 tracking-tight">Annonce publiée !</h2>
         <p className="text-[13px] text-[#37352F]/60 font-medium mb-8">Les sitters ont été prévenus.</p>
         <button onClick={onClose} className="w-full max-w-xs py-3.5 rounded-lg font-bold text-white bg-[#C25E72] hover:bg-[#A34D5E] transition-colors">Retour</button>
+      </div>
+    );
+  }
+
+  if (overlayState === 'preview') {
+    return (
+      <div className="fixed inset-0 z-[5000] bg-black/60 backdrop-blur-md flex items-center justify-center p-4 animate-in fade-in duration-300">
+        <div className="bg-white w-full max-w-[400px] rounded-[32px] overflow-hidden shadow-2xl animate-in zoom-in-95 duration-500">
+          <div className="bg-[#C25E72] p-4 text-center">
+            <span className="text-[10px] font-bold text-white/80 uppercase tracking-[0.2em]">Aperçu de votre annonce</span>
+          </div>
+          <div className="p-6 space-y-6">
+            <div className="aspect-[4/3] rounded-2xl bg-gray-100 overflow-hidden relative">
+              <img 
+                src={petPhotos[0] || "https://images.unsplash.com/photo-1514888286974-6c03e2ca1dba?q=80&w=800&auto=format&fit=crop"} 
+                className="w-full h-full object-cover"
+                alt="Preview"
+              />
+              <div className="absolute top-3 left-3 px-3 py-1 bg-white/90 backdrop-blur-sm rounded-full shadow-sm">
+                <span className="text-[10px] font-bold text-[#C25E72] uppercase tracking-wider">{careType === 'visits' ? 'Visites' : careType === 'home' ? 'À domicile' : 'Pension'}</span>
+              </div>
+              {petPhotos.length > 1 && (
+                <div className="absolute bottom-3 right-3 px-2 py-1 bg-black/50 backdrop-blur-sm rounded-md text-white text-[10px] font-bold">
+                  +{petPhotos.length - 1} photo{petPhotos.length > 2 ? 's' : ''}
+                </div>
+              )}
+            </div>
+            <div className="space-y-3">
+              <div className="flex justify-between items-start">
+                <h3 className="text-[20px] font-bold text-[#1C1C1B]">{petName}</h3>
+                <span className="text-[18px] font-bold text-[#C25E72]">{priceDetails.total}€</span>
+              </div>
+              <p className="text-[13px] text-[#37352F]/60 font-medium line-clamp-2 italic">
+                "{description || "Pas de description fournie."}"
+              </p>
+              <div className="pt-4 border-t border-[#E9E9E7] flex items-center justify-between">
+                <div className="flex items-center gap-2">
+                  <div className="w-6 h-6 rounded-full bg-[#F0F0EF] flex items-center justify-center text-[10px]">📍</div>
+                  <span className="text-[11px] font-bold text-[#1C1C1B] truncate max-w-[150px]">{address}</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <div className="w-6 h-6 rounded-full bg-[#F0F0EF] flex items-center justify-center text-[10px]">📅</div>
+                  <span className="text-[11px] font-bold text-[#1C1C1B]">
+                    {startDate && endDate ? `${startDate.getDate()} - ${endDate.getDate()} ${startDate.toLocaleDateString('fr-FR', { month: 'short' })}` : "Dates flexibles"}
+                  </span>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div className="px-6 pb-8 space-y-4">
+            <button 
+              onClick={() => setOverlayState('account')}
+              className="w-full py-4 bg-[#C25E72] hover:bg-[#A34D5E] text-white rounded-2xl font-bold text-[15px] transition-all shadow-lg shadow-[#C25E72]/20 border border-white/20 active:scale-[0.98]"
+            >
+              Publier mon annonce
+            </button>
+            <button 
+              onClick={() => setOverlayState('search')}
+              className="w-full text-[12px] font-bold text-[#37352F]/40 uppercase tracking-widest hover:text-[#37352F] transition-colors"
+            >
+              Modifier
+            </button>
+          </div>
+        </div>
+        <style>{`
+          @keyframes progress-3s {
+            from { width: 0%; }
+            to { width: 100%; }
+          }
+          .animate-progress-3s {
+            animation: progress-3s 3s linear forwards;
+          }
+        `}</style>
       </div>
     );
   }
@@ -413,6 +541,113 @@ const BookingDropdown: React.FC<BookingDropdownProps> = ({ onClose, onDatesSelec
                     <span className="uppercase tracking-widest text-[#37352F]/60">Pucé(e)</span>
                     <div className={`w-4 h-4 rounded-full border-2 transition-all ${isChipped ? 'bg-[#1C1C1B] border-[#1C1C1B]' : 'border-[#E9E9E7]'}`} />
                   </button>
+                </div>
+                <div className="space-y-2">
+                  <label className="text-[10px] font-bold text-[#37352F]/40 uppercase tracking-widest ml-1">Photos (Obligatoire)</label>
+                  
+                  {imageToCrop ? (
+                    <div className="space-y-4 animate-in fade-in zoom-in-95 duration-500">
+                      <div className="relative aspect-square w-full rounded-2xl overflow-hidden border border-[#E9E9E7] bg-[#F5F5F0] shadow-inner">
+                        <Cropper
+                          image={imageToCrop}
+                          crop={crop}
+                          zoom={zoom}
+                          rotation={rotation}
+                          aspect={1}
+                          onCropChange={setCrop}
+                          onRotationChange={setRotation}
+                          onCropComplete={onCropComplete}
+                          onZoomChange={setZoom}
+                          restrictPosition={true}
+                          style={{
+                            containerStyle: { background: '#F5F5F0' },
+                            cropAreaStyle: { 
+                              border: '2px solid white',
+                              boxShadow: '0 0 0 9999px rgba(255, 255, 255, 0.5)',
+                              borderRadius: '12px'
+                            }
+                          }}
+                        />
+                        <div className="absolute bottom-3 left-1/2 -translate-x-1/2 px-3 py-1.5 bg-white/80 backdrop-blur-md rounded-full border border-white/20 shadow-sm pointer-events-none">
+                          <span className="text-[9px] font-bold text-[#C25E72] uppercase tracking-widest">Cadrage précis</span>
+                        </div>
+                      </div>
+                      
+                      <div className="flex flex-col gap-4 px-1">
+                        <div className="space-y-3">
+                          <div className="flex items-center gap-4">
+                            <span className="w-12 text-[9px] font-bold text-[#37352F]/40 uppercase">Zoom</span>
+                            <input
+                              type="range"
+                              value={zoom}
+                              min={1}
+                              max={3}
+                              step={0.1}
+                              onChange={(e) => setZoom(Number(e.target.value))}
+                              className="flex-1 h-1 bg-[#E9E9E7] rounded-full appearance-none cursor-pointer accent-[#C25E72]"
+                            />
+                          </div>
+                          <div className="flex items-center gap-4">
+                            <span className="w-12 text-[9px] font-bold text-[#37352F]/40 uppercase">Rotation</span>
+                            <input
+                              type="range"
+                              value={rotation}
+                              min={0}
+                              max={360}
+                              step={1}
+                              onChange={(e) => setRotation(Number(e.target.value))}
+                              className="flex-1 h-1 bg-[#E9E9E7] rounded-full appearance-none cursor-pointer accent-[#C25E72]"
+                            />
+                          </div>
+                        </div>
+                        
+                        <div className="flex gap-3 pt-2">
+                          <button 
+                            onClick={() => setImageToCrop(null)}
+                            className="flex-1 py-3 rounded-xl border border-[#E9E9E7] text-[11px] font-bold uppercase tracking-[0.15em] text-[#37352F]/60 hover:bg-gray-50 transition-all active:scale-95"
+                          >
+                            Annuler
+                          </button>
+                          <button 
+                            onClick={saveCroppedImage}
+                            className="flex-1 py-3 rounded-xl bg-[#1C1C1B] text-white text-[11px] font-bold uppercase tracking-[0.15em] hover:bg-black transition-all active:scale-95 shadow-lg shadow-black/10"
+                          >
+                            Confirmer
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  ) : (
+                    <div className="flex gap-2 overflow-x-auto no-scrollbar pb-1">
+                      <label className="flex-shrink-0 w-20 h-20 rounded-xl border-2 border-dashed border-[#E9E9E7] hover:border-[#C25E72]/40 flex flex-col items-center justify-center cursor-pointer transition-all bg-white">
+                        <input type="file" multiple accept="image/*" className="hidden" onChange={handlePhotoUpload} />
+                        <span className="text-xl text-[#37352F]/20">+</span>
+                        <span className="text-[8px] font-bold text-[#37352F]/30 uppercase">Ajouter</span>
+                      </label>
+                      {petPhotos.map((photo, idx) => (
+                        <div key={idx} className="flex-shrink-0 w-20 h-20 rounded-xl overflow-hidden relative group shadow-sm cursor-pointer">
+                          <img 
+                            src={photo} 
+                            className="w-full h-full object-cover" 
+                            alt="Pet" 
+                            onClick={() => {
+                              setImageToCrop(photo);
+                              setCroppingIndex(idx);
+                            }}
+                          />
+                          <button 
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              removePhoto(idx);
+                            }}
+                            className="absolute top-1 right-1 w-5 h-5 bg-black/50 rounded-full flex items-center justify-center text-white opacity-0 group-hover:opacity-100 transition-opacity"
+                          >
+                            ×
+                          </button>
+                        </div>
+                      ))}
+                    </div>
+                  )}
                 </div>
               </div>
 
