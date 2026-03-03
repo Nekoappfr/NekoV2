@@ -190,7 +190,7 @@ const AgendaTab = () => {
       <div style={{ backgroundColor: 'white', borderRadius: '24px', padding: '20px', border: '1px solid #E9E9E7', marginBottom: '24px' }}>
         <h3 style={{ fontSize: '14px', fontWeight: 800, textAlign: 'center', marginBottom: '16px' }}>Janvier 2026</h3>
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(7, 1fr)', gap: '4px' }}>
-          {['L', 'M', 'M', 'J', 'V', 'S', 'D'].map(d => <div key={d} style={{ fontSize: '10px', textAlign: 'center', color: 'rgba(55, 53, 47, 0.4)', fontWeight: 800, paddingBottom: '8px' }}>{d}</div>)}
+          {['L', 'M', 'M', 'J', 'V', 'S', 'D'].map((d, idx) => <div key={`${d}-${idx}`} style={{ fontSize: '10px', textAlign: 'center', color: 'rgba(55, 53, 47, 0.4)', fontWeight: 800, paddingBottom: '8px' }}>{d}</div>)}
           {Array.from({ length: 31 }).map((_, i) => {
             const day = i + 1;
             const isBlocked = day >= 5 && day <= 8;

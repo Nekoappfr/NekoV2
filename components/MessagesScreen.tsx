@@ -57,8 +57,30 @@ const MOCK_CONVERSATIONS: Conversation[] = [
   }
 ];
 
-const MessagesScreen: React.FC<{ onBack: () => void }> = ({ onBack }) => {
-  const filteredConversations = MOCK_CONVERSATIONS;
+const MessagesScreen: React.FC<{ onBack: () => void, newConversationSitter?: any }> = ({ onBack, newConversationSitter }) => {
+  const [conversations, setConversations] = useState<Conversation[]>(MOCK_CONVERSATIONS);
+
+  // If we have a new sitter to contact, we add them to the top if not already there
+  React.useEffect(() => {
+    if (newConversationSitter) {
+      const exists = conversations.find(c => c.name === newConversationSitter.name);
+      if (!exists) {
+        const newConv: Conversation = {
+          id: `new-${Date.now()}`,
+          name: newConversationSitter.name,
+          listingTitle: 'Nouvelle conversation',
+          lastMessage: 'Dites bonjour à ' + newConversationSitter.name.split(' ')[0] + ' !',
+          date: 'Maintenant',
+          avatar: newConversationSitter.image,
+          status: 'pending',
+          isUnread: true
+        };
+        setConversations([newConv, ...conversations]);
+      }
+    }
+  }, [newConversationSitter]);
+
+  const filteredConversations = conversations;
 
   return (
     <div className="min-h-screen bg-white font-sans selection:bg-neko-rose/20 max-w-[390px] mx-auto overflow-x-hidden">

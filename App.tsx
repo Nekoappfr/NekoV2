@@ -20,7 +20,7 @@ import PetSitterListing from './components/PetSitterListing';
 import AuthModal from './components/AuthModal';
 import { Search, PlusCircle, User } from 'lucide-react';
 import { PricingTabType } from './types';
-import { MOCK_LISTINGS } from './constants';
+import { MOCK_LISTINGS, MOCK_SITTERS } from './constants';
 
 const SnoutLogo = ({ className = "w-6 h-6" }: { className?: string }) => (
   <svg className={className} viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -136,6 +136,7 @@ const App: React.FC = () => {
   const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
   const [isSearchActive, setIsSearchActive] = useState(false);
   const [selectedSitterId, setSelectedSitterId] = useState<string | null>(null);
+  const [selectedSitterForMessage, setSelectedSitterForMessage] = useState<any | null>(null);
   const [selectedListingId, setSelectedListingId] = useState<string | null>(null);
   const [isSticky, setIsSticky] = useState(false);
   
@@ -168,11 +169,7 @@ const App: React.FC = () => {
 
   const handleActionClick = (intent: 'login' | 'join') => {
     setAuthIntent(intent);
-    if (intent === 'login') {
-      setViewState('role_selection');
-    } else {
-      setIsAuthModalOpen(true);
-    }
+    setViewState('role_selection');
   };
 
   const handleAuthSuccess = () => {
@@ -188,7 +185,8 @@ const App: React.FC = () => {
   const handleRoleChosen = (role: 'owner' | 'sitter') => {
     if (authIntent === 'login') {
       setSelectedRole(role);
-      setIsAuthModalOpen(true);
+      if (role === 'sitter') setViewState('sitter_dashboard');
+      else setViewState('owner_dashboard');
     } else {
       if (role === 'sitter') {
         setViewState('register-sitter');
@@ -224,10 +222,15 @@ const App: React.FC = () => {
     }
 
     if (viewState === 'sitter_profile') {
+      const sitter = MOCK_SITTERS.find(s => s.id === selectedSitterId);
       return (
         <SitterProfile 
           sitterId={selectedSitterId}
           onBack={() => setViewState('home')} 
+          onContact={() => {
+            setSelectedSitterForMessage(sitter);
+            setViewState('messages');
+          }}
         />
       );
     }
@@ -246,7 +249,7 @@ const App: React.FC = () => {
     }
 
     if (viewState === 'messages') {
-      return <MessagesScreen onBack={() => setViewState('owner_dashboard')} />;
+      return <MessagesScreen onBack={() => setViewState('owner_dashboard')} newConversationSitter={selectedSitterForMessage} />;
     }
 
     if (viewState === 'sitter_dashboard') {
@@ -392,7 +395,7 @@ const App: React.FC = () => {
 
     return (
       <>
-        <section className="w-full px-4 lg:px-8 pt-4 md:pt-12 mx-auto max-w-[1400px]" ref={heroSearchRef}>
+        <section className="w-full px-4 md:px-[40px] lg:px-[80px] pt-4 md:pt-12 mx-auto max-w-[2520px]" ref={heroSearchRef}>
           <div className="relative w-full overflow-hidden rounded-[48px] shadow-2xl border border-warm-border">
             {/* Zone 1 – Hero photo */}
             <div className="relative w-full h-[400px] md:h-[600px]">
@@ -465,7 +468,7 @@ const App: React.FC = () => {
           </div>
         </section>
 
-        <main className="w-full px-4 md:px-6 lg:px-12 pb-12">
+        <main className="w-full px-4 md:px-[40px] lg:px-[80px] pb-12 mx-auto max-w-[2520px]">
           <div className="space-y-32">
             <section id="listings" className="space-y-8 animate-section">
               <div className="flex items-center justify-between">
@@ -520,8 +523,8 @@ const App: React.FC = () => {
   return (
     <div className={`min-h-screen bg-warm-bg w-full overflow-x-hidden selection:bg-neko-primary/20 ${(viewState === 'lead_capture' || viewState === 'role_selection' || isSearchActive || isAuthModalOpen) ? 'overflow-hidden h-screen' : ''}`}>
       {/* Sticky Search Bar */}
-      <div className={`fixed top-0 left-0 right-0 z-[60] bg-white/40 backdrop-blur-md border-b border-warm-border/10 transform transition-all duration-500 ease-in-out px-4 py-3 md:px-12 ${isSticky && viewState === 'home' && !isSearchActive ? 'translate-y-0 opacity-100' : '-translate-y-full opacity-0 pointer-events-none'}`}>
-        <div className="max-w-7xl mx-auto flex items-center gap-6">
+      <div className={`fixed top-0 left-0 right-0 z-[60] bg-white/40 backdrop-blur-md border-b border-warm-border/10 transform transition-all duration-500 ease-in-out px-4 py-3 md:px-[40px] lg:px-[80px] ${isSticky && viewState === 'home' && !isSearchActive ? 'translate-y-0 opacity-100' : '-translate-y-full opacity-0 pointer-events-none'}`}>
+        <div className="max-w-[2520px] mx-auto flex items-center gap-6">
           <div className="hidden md:block cursor-pointer hover:scale-110 transition-transform" onClick={() => setViewState('home')}>
             <SnoutLogo className="w-9 h-9" />
           </div>
@@ -569,21 +572,23 @@ const App: React.FC = () => {
                 Le réseau parisien le plus fiable pour les propriétaires et sitters de chats. Rejoignez des milliers de voisins vérifiés.
               </p>
             </div>
-            <div className="space-y-6">
-              <h4 className="text-[11px] font-semibold text-white/40 uppercase tracking-[0.2em]">Plateforme</h4>
-              <ul className="text-[14px] space-y-4 text-white/80 font-medium">
-                <li><button onClick={() => setViewState('sitter_listing')} className="hover:text-neko-primary transition-colors text-left">Explorer les sitters</button></li>
-                <li><button onClick={() => setViewState('register-sitter')} className="hover:text-neko-primary transition-colors text-left">Devenir Sitter</button></li>
-                <li><button onClick={() => setViewState('pricing')} className="hover:text-neko-primary transition-colors text-left">Tarifs</button></li>
-                <li><button onClick={() => setViewState('selection_process')} className="hover:text-neko-primary transition-colors text-left">Sélection des sitters</button></li>
-              </ul>
-            </div>
-            <div className="space-y-6">
-              <h4 className="text-[11px] font-semibold text-white/40 uppercase tracking-[0.2em]">Chartes</h4>
-              <ul className="text-[14px] space-y-4 text-white/80 font-medium">
-                <li><button onClick={() => setViewState('sitter_charter')} className="hover:text-neko-primary transition-colors text-left">Charte du Pet Sitter</button></li>
-                <li><button onClick={() => setViewState('owner_charter')} className="hover:text-neko-primary transition-colors text-left">Charte du Propriétaire</button></li>
-              </ul>
+            <div className="col-span-1 md:col-span-2 space-y-8">
+              <div className="space-y-6">
+                <h4 className="text-[11px] font-semibold text-white/40 uppercase tracking-[0.2em]">Plateforme</h4>
+                <div className="space-y-6">
+                  <button className="w-fit px-5 py-3 bg-white/5 hover:bg-white/10 border border-white/10 text-white font-bold text-[13px] rounded-xl transition-all">
+                    Une question ? Contactez nous
+                  </button>
+                  <ul className="text-[14px] space-y-4 text-white/80 font-medium">
+                    <li><button onClick={() => setViewState('sitter_listing')} className="hover:text-neko-primary transition-colors text-left">Explorer les sitters</button></li>
+                    <li><button onClick={() => setViewState('register-sitter')} className="hover:text-neko-primary transition-colors text-left">Devenir Sitter</button></li>
+                    <li><button onClick={() => setViewState('pricing')} className="hover:text-neko-primary transition-colors text-left">Tarifs</button></li>
+                    <li><button onClick={() => setViewState('selection_process')} className="hover:text-neko-primary transition-colors text-left">Comment sont sélectionnés nos pet sitters</button></li>
+                    <li><button onClick={() => setViewState('sitter_charter')} className="hover:text-neko-primary transition-colors text-left">Charte du Pet Sitter</button></li>
+                    <li><button onClick={() => setViewState('owner_charter')} className="hover:text-neko-primary transition-colors text-left">Charte du Propriétaire</button></li>
+                  </ul>
+                </div>
+              </div>
             </div>
           </div>
           <div className="max-w-7xl mx-auto mt-16 pt-8 border-t border-white/5 flex flex-col md:flex-row justify-between items-center gap-6">

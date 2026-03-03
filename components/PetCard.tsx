@@ -24,17 +24,17 @@ const PetCard: React.FC<PetCardProps> = ({ listing, onClick }) => {
 
   return (
     <div 
-      className="flex-shrink-0 snap-start w-[180px] md:w-[280px] flex flex-col group cursor-pointer"
+      className="w-full flex flex-col group cursor-pointer"
       onClick={onClick}
     >
       <div className="flex items-center justify-between w-full mb-4 px-2">
         <div className="flex items-center gap-3 truncate mr-1">
           <img 
             src={listing.ownerAvatars[0]} 
-            className="w-6 h-6 md:w-7 md:h-7 rounded-full object-cover border border-warm-border transition-all duration-500" 
+            className="w-6 h-6 md:w-8 md:h-8 rounded-full object-cover border border-warm-border transition-all duration-500" 
             alt={listing.ownerName}
           />
-          <span className="text-[16px] md:text-[18px] font-bold text-warm-text tracking-tight truncate">
+          <span className="text-base font-light text-neutral-500 tracking-tight truncate">
             {listing.ownerName}
           </span>
         </div>
@@ -44,7 +44,7 @@ const PetCard: React.FC<PetCardProps> = ({ listing, onClick }) => {
         </div>
       </div>
 
-      <div className="relative w-full h-[200px] md:h-[360px] rounded-[32px] overflow-hidden shadow-xl hover:shadow-2xl transition-all duration-700 bg-warm-paper mb-6">
+      <div className="relative w-full aspect-square rounded-[32px] overflow-hidden shadow-xl hover:shadow-2xl transition-all duration-700 bg-warm-paper mb-6">
         <img 
           src={listing.image} 
           className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-[3000ms] ease-out" 
@@ -64,7 +64,7 @@ const PetCard: React.FC<PetCardProps> = ({ listing, onClick }) => {
         
         <div className="absolute bottom-6 left-6 md:bottom-8 md:left-8 z-10">
           <h3 
-            className="text-[20px] md:text-[28px] font-bold leading-tight tracking-tight drop-shadow-md"
+            className="text-2xl font-bold leading-tight tracking-tight drop-shadow-md"
             style={{ color: 'white' }}
           >
             {listing.petName}

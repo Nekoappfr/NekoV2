@@ -207,8 +207,8 @@ const BookingDropdown: React.FC<BookingDropdownProps> = ({ onClose, onDatesSelec
         {monthDate.toLocaleDateString('fr-FR', { month: 'long', year: 'numeric' })}
       </h3>
       <div className="grid grid-cols-7 gap-1">
-        {['L', 'M', 'M', 'J', 'V', 'S', 'D'].map(d => (
-          <div key={d} className="text-center text-[10px] font-medium text-[#37352F]/40 pb-2 uppercase tracking-widest">{d}</div>
+        {['L', 'M', 'M', 'J', 'V', 'S', 'D'].map((d, idx) => (
+          <div key={`${d}-${idx}`} className="text-center text-[10px] font-medium text-[#37352F]/40 pb-2 uppercase tracking-widest">{d}</div>
         ))}
         {getDaysInMonth(monthDate).map((day, i) => {
           if (!day) return <div key={`empty-${i}`} />;
