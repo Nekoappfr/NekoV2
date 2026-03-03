@@ -107,7 +107,7 @@ const NewSitterProfile: React.FC<NewSitterProfileProps> = ({ sitterId, onBack, o
               transition={{ duration: 0.6 }}
             >
               {/* Photo Carousel */}
-              <div className="relative h-[60vh] w-full rounded-[48px] overflow-hidden shadow-2xl shadow-black/5 group border border-warm-border">
+              <div className="relative aspect-square md:aspect-[16/7] rounded-[48px] overflow-hidden shadow-2xl shadow-black/5 group border border-warm-border">
                 <AnimatePresence mode="wait">
                   <motion.img
                     key={currentImageIndex}

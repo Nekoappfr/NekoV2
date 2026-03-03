@@ -19,8 +19,8 @@ const ListingDetail: React.FC<ListingDetailProps> = ({ listingId, onBack }) => {
   return (
     <div className="min-h-screen bg-warm-bg font-sans text-warm-text pb-20">
       {/* Sticky Header */}
-      <header className="sticky top-0 z-50 bg-white/80 backdrop-blur-md border-b border-warm-border px-4 md:px-[40px] lg:px-[80px] py-4">
-        <div className="max-w-[2520px] mx-auto flex items-center justify-between">
+      <header className="sticky top-0 z-50 bg-white/80 backdrop-blur-md border-b border-warm-border px-4 md:px-8 py-4">
+        <div className="max-w-6xl mx-auto flex items-center justify-between">
           <div className="flex items-center gap-4">
             <button 
               onClick={onBack} 
@@ -44,7 +44,7 @@ const ListingDetail: React.FC<ListingDetailProps> = ({ listingId, onBack }) => {
         </div>
       </header>
 
-      <main className="max-w-[2520px] mx-auto px-4 md:px-[40px] lg:px-[80px] py-8">
+      <main className="max-w-6xl mx-auto px-4 md:px-8 py-8">
         <div className="grid grid-cols-1 lg:grid-cols-[1fr_360px] gap-12 items-start">
           
           {/* Main Column (Left) */}
@@ -52,7 +52,7 @@ const ListingDetail: React.FC<ListingDetailProps> = ({ listingId, onBack }) => {
             
             {/* 1. Hero Image & Gallery */}
             <section className="space-y-6">
-              <div className="relative h-[60vh] w-full rounded-[40px] overflow-hidden shadow-2xl shadow-black/5 group">
+              <div className="relative aspect-square md:aspect-[16/9] rounded-[40px] overflow-hidden shadow-2xl shadow-black/5 group">
                 <img 
                   src={listing.image} 
                   alt={listing.petName} 

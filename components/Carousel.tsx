@@ -8,8 +8,8 @@ interface CarouselProps {
 
 const Carousel: React.FC<CarouselProps> = ({ onListingClick }) => {
   return (
-    <div className="relative w-full">
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
+    <div className="relative w-full overflow-hidden">
+      <div className="horizontal-scroll-container no-scrollbar py-2 gap-2.5 md:gap-8 lg:gap-10">
         {MOCK_LISTINGS.map((listing) => (
           <PetCard 
             key={listing.id} 
@@ -17,6 +17,8 @@ const Carousel: React.FC<CarouselProps> = ({ onListingClick }) => {
             onClick={() => onListingClick(listing.id)}
           />
         ))}
+        {/* Spacer for consistent end-of-scroll padding */}
+        <div className="min-w-[20px] md:min-w-[60px] h-full flex-shrink-0"></div>
       </div>
     </div>
   );

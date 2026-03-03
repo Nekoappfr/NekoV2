@@ -104,17 +104,15 @@ const PetSitterListing: React.FC<PetSitterListingProps> = ({ onBack, onSitterCli
   };
 
   return (
-    <div className="flex flex-col min-h-screen bg-warm-bg w-full mx-auto overflow-x-hidden shadow-2xl">
+    <div className="flex flex-col min-h-screen bg-warm-bg w-full max-w-[375px] mx-auto overflow-x-hidden shadow-2xl">
       {/* Header */}
-      <header className="px-5 md:px-[40px] lg:px-[80px] py-4 flex items-center gap-4 bg-white border-b border-warm-border sticky top-0 z-50">
-        <div className="max-w-[2520px] mx-auto w-full flex items-center gap-4">
-          <button onClick={onBack} className="p-1 -ml-1 hover:bg-warm-bg rounded-full transition-colors">
-            <ChevronLeft className="w-6 h-6 text-warm-text" />
-          </button>
-          <div className="flex flex-col">
-            <h1 className="text-[18px] font-bold text-warm-text leading-tight">Pet sitters</h1>
-            <p className="text-[12px] text-warm-text/50 font-medium">Paris & Île-de-France · {today}</p>
-          </div>
+      <header className="px-5 py-4 flex items-center gap-4 bg-white border-b border-warm-border sticky top-0 z-50">
+        <button onClick={onBack} className="p-1 -ml-1 hover:bg-warm-bg rounded-full transition-colors">
+          <ChevronLeft className="w-6 h-6 text-warm-text" />
+        </button>
+        <div className="flex flex-col">
+          <h1 className="text-[18px] font-bold text-warm-text leading-tight">Pet sitters</h1>
+          <p className="text-[12px] text-warm-text/50 font-medium">Paris & Île-de-France · {today}</p>
         </div>
       </header>
 
@@ -175,36 +173,34 @@ const PetSitterListing: React.FC<PetSitterListingProps> = ({ onBack, onSitterCli
       </div>
 
       {/* Filter Pills */}
-      <div className="bg-white border-b border-warm-border">
-        <div className="max-w-[2520px] mx-auto flex items-center gap-2 px-4 md:px-[40px] lg:px-[80px] py-4 overflow-x-auto no-scrollbar">
-          <button className="p-2 bg-warm-paper rounded-lg flex-shrink-0">
-            <Settings className="w-4 h-4 text-warm-text/60" />
+      <div className="flex items-center gap-2 px-4 py-4 overflow-x-auto no-scrollbar bg-white border-b border-warm-border">
+        <button className="p-2 bg-warm-paper rounded-lg flex-shrink-0">
+          <Settings className="w-4 h-4 text-warm-text/60" />
+        </button>
+        <div className="flex items-center gap-2">
+          <button className="px-4 py-2 bg-neko-rose text-white rounded-full text-[13px] font-bold flex items-center gap-1.5 whitespace-nowrap">
+            ✨ Tous
           </button>
-          <div className="flex items-center gap-2">
-            <button className="px-4 py-2 bg-neko-rose text-white rounded-full text-[13px] font-bold flex items-center gap-1.5 whitespace-nowrap">
-              ✨ Tous
-            </button>
-            <button className="px-4 py-2 bg-warm-paper text-warm-text/70 rounded-full text-[13px] font-bold flex items-center gap-1.5 whitespace-nowrap">
-              🛏️ Garde
-            </button>
-            <button className="px-4 py-2 bg-warm-paper text-warm-text/70 rounded-full text-[13px] font-bold flex items-center gap-1.5 whitespace-nowrap">
-              🚶 Visites
-            </button>
-            <button className="px-4 py-2 bg-warm-paper text-warm-text/70 rounded-full text-[13px] font-bold flex items-center gap-1.5 whitespace-nowrap">
-              🏡 Home sitting
-            </button>
-          </div>
+          <button className="px-4 py-2 bg-warm-paper text-warm-text/70 rounded-full text-[13px] font-bold flex items-center gap-1.5 whitespace-nowrap">
+            🛏️ Garde
+          </button>
+          <button className="px-4 py-2 bg-warm-paper text-warm-text/70 rounded-full text-[13px] font-bold flex items-center gap-1.5 whitespace-nowrap">
+            🚶 Visites
+          </button>
+          <button className="px-4 py-2 bg-warm-paper text-warm-text/70 rounded-full text-[13px] font-bold flex items-center gap-1.5 whitespace-nowrap">
+            🏡 Home sitting
+          </button>
         </div>
       </div>
 
       {/* Results List */}
-      <div className="max-w-[2520px] mx-auto w-full px-4 md:px-[40px] lg:px-[80px] py-6 space-y-6">
+      <div className="px-4 py-6 space-y-6">
         <div className="flex items-center justify-between">
-          <h2 className="text-2xl font-bold text-warm-text">{filteredSitters.length} sitters dans cette zone</h2>
-          <span className="text-base font-light text-neutral-500">Trié par pertinence</span>
+          <h2 className="text-[18px] font-bold text-warm-text">{filteredSitters.length} sitters dans cette zone</h2>
+          <span className="text-[12px] font-medium text-warm-text/40">Trié par pertinence</span>
         </div>
         
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
+        <div className="space-y-4">
           <AnimatePresence mode="popLayout">
             {filteredSitters.map((sitter) => (
               <motion.div 
@@ -215,65 +211,64 @@ const PetSitterListing: React.FC<PetSitterListingProps> = ({ onBack, onSitterCli
                 exit={{ opacity: 0, scale: 0.95 }}
                 transition={{ duration: 0.2 }}
                 onClick={() => onSitterClick(sitter.id)}
-                className="group bg-white rounded-[24px] overflow-hidden shadow-sm hover:shadow-xl border border-warm-border transition-all duration-300 cursor-pointer active:scale-[0.98] flex flex-col"
+                className="group bg-white rounded-[24px] overflow-hidden shadow-sm hover:shadow-xl border border-warm-border transition-all duration-300 cursor-pointer active:scale-[0.98]"
               >
-                <div className="relative aspect-square overflow-hidden">
-                  <img 
-                    src={sitter.image} 
-                    alt={sitter.name}
-                    className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
-                  />
-                  {sitter.isVerified && (
-                    <div className="absolute top-4 right-4 bg-white rounded-full p-1.5 shadow-md">
-                      <ShieldCheck className="w-5 h-5 text-neko-olive fill-warm-paper" />
-                    </div>
-                  )}
-                  <div className="absolute bottom-4 left-4 right-4 flex items-center justify-between">
-                    <div className="flex items-center gap-1 px-2.5 py-1.5 bg-white/80 backdrop-blur-md rounded-xl shadow-sm">
-                      <Star className="w-3.5 h-3.5 text-neko-rose fill-neko-rose" />
-                      <span className="text-[13px] font-bold text-warm-text">{sitter.rating}</span>
-                    </div>
-                    <div className="px-3 py-1.5 bg-white/80 backdrop-blur-md rounded-xl shadow-sm">
-                      <span className="text-lg font-semibold text-warm-text">15€</span>
+                <div className="flex p-4 gap-4">
+                  <div className="relative flex-shrink-0">
+                    <img 
+                      src={sitter.image} 
+                      alt={sitter.name}
+                      className="w-[100px] h-[100px] rounded-[20px] object-cover"
+                    />
+                    {sitter.isVerified && (
+                      <div className="absolute -bottom-1 -right-1 bg-white rounded-full p-1 shadow-sm">
+                        <ShieldCheck className="w-4 h-4 text-neko-olive fill-warm-paper" />
+                      </div>
+                    )}
+                  </div>
+                  
+                  <div className="flex flex-col flex-1 min-w-0 justify-between">
+                    <div>
+                      <div className="flex items-center justify-between mb-1">
+                        <span className="text-[17px] font-bold text-warm-text group-hover:text-neko-rose transition-colors truncate">
+                          {sitter.name}
+                        </span>
+                        <div className="flex items-center gap-1 px-2 py-1 bg-warm-paper rounded-lg">
+                          <Star className="w-3 h-3 text-neko-rose fill-neko-rose" />
+                          <span className="text-[12px] font-bold text-warm-text">{sitter.rating}</span>
+                        </div>
+                      </div>
+                      
+                      <div className="flex items-center gap-3 text-[13px] text-warm-text/50 font-medium mb-3">
+                        <span className="flex items-center gap-1">
+                          <MapPin className="w-3.5 h-3.5" /> {sitter.distance}
+                        </span>
+                        <span>•</span>
+                        <span>{sitter.reviews} avis</span>
+                      </div>
+
+                      <div className="flex flex-wrap gap-1.5">
+                        {sitter.services.map(service => (
+                          <span key={service} className={`px-2.5 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider ${
+                            service === 'boarding' ? 'bg-neko-rose/5 text-neko-rose border border-neko-rose/10' :
+                            'bg-warm-paper text-warm-text/60 border border-warm-border'
+                          }`}>
+                            {service === 'boarding' ? 'Garde' : service === 'visit' ? 'Visite' : 'Home Sitting'}
+                          </span>
+                        ))}
+                      </div>
                     </div>
                   </div>
                 </div>
-                
-                <div className="p-6 flex flex-col flex-1">
-                  <div className="flex items-center justify-between mb-2">
-                    <span className="text-2xl font-bold text-warm-text group-hover:text-neko-rose transition-colors truncate">
-                      {sitter.name}
-                    </span>
-                  </div>
-                  
-                  <div className="flex items-center gap-3 text-base font-light text-neutral-500 mb-4">
-                    <span className="flex items-center gap-1">
-                      <MapPin className="w-4 h-4" /> {sitter.distance}
-                    </span>
-                    <span>•</span>
-                    <span>{sitter.reviews} avis</span>
-                  </div>
 
-                  <div className="flex flex-wrap gap-1.5 mb-auto">
-                    {sitter.services.map(service => (
-                      <span key={service} className={`px-2.5 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider ${
-                        service === 'boarding' ? 'bg-neko-rose/5 text-neko-rose border border-neko-rose/10' :
-                        'bg-warm-paper text-warm-text/60 border border-warm-border'
-                      }`}>
-                        {service === 'boarding' ? 'Garde' : service === 'visit' ? 'Visite' : 'Home Sitting'}
-                      </span>
-                    ))}
+                <div className="px-4 py-3 bg-warm-paper/30 border-t border-warm-border flex items-center justify-between">
+                  <div className="flex items-center gap-1.5 text-neko-olive">
+                    <CheckCircle2 className="w-3.5 h-3.5" />
+                    <span className="text-[11px] font-bold uppercase tracking-widest">Vérifié</span>
                   </div>
-
-                  <div className="mt-6 pt-4 border-t border-warm-border flex items-center justify-between">
-                    <div className="flex items-center gap-1.5 text-neko-olive">
-                      <CheckCircle2 className="w-3.5 h-3.5" />
-                      <span className="text-[11px] font-bold uppercase tracking-widest">Vérifié</span>
-                    </div>
-                    <div className="flex items-center gap-1.5 text-neko-rose">
-                      <Zap className="w-3.5 h-3.5 fill-current" />
-                      <span className="text-[11px] font-bold uppercase tracking-widest">Réponse en {sitter.responseTime}</span>
-                    </div>
+                  <div className="flex items-center gap-1.5 text-neko-rose">
+                    <Zap className="w-3.5 h-3.5 fill-current" />
+                    <span className="text-[11px] font-bold uppercase tracking-widest">Réponse en {sitter.responseTime}</span>
                   </div>
                 </div>
               </motion.div>

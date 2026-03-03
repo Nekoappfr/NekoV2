@@ -395,7 +395,7 @@ const App: React.FC = () => {
 
     return (
       <>
-        <section className="w-full px-4 md:px-[40px] lg:px-[80px] pt-4 md:pt-12 mx-auto max-w-[2520px]" ref={heroSearchRef}>
+        <section className="w-full px-4 lg:px-8 pt-4 md:pt-12 mx-auto max-w-[1400px]" ref={heroSearchRef}>
           <div className="relative w-full overflow-hidden rounded-[48px] shadow-2xl border border-warm-border">
             {/* Zone 1 – Hero photo */}
             <div className="relative w-full h-[400px] md:h-[600px]">
@@ -468,7 +468,7 @@ const App: React.FC = () => {
           </div>
         </section>
 
-        <main className="w-full px-4 md:px-[40px] lg:px-[80px] pb-12 mx-auto max-w-[2520px]">
+        <main className="w-full px-4 md:px-6 lg:px-12 pb-12">
           <div className="space-y-32">
             <section id="listings" className="space-y-8 animate-section">
               <div className="flex items-center justify-between">
@@ -523,8 +523,8 @@ const App: React.FC = () => {
   return (
     <div className={`min-h-screen bg-warm-bg w-full overflow-x-hidden selection:bg-neko-primary/20 ${(viewState === 'lead_capture' || viewState === 'role_selection' || isSearchActive || isAuthModalOpen) ? 'overflow-hidden h-screen' : ''}`}>
       {/* Sticky Search Bar */}
-      <div className={`fixed top-0 left-0 right-0 z-[60] bg-white/40 backdrop-blur-md border-b border-warm-border/10 transform transition-all duration-500 ease-in-out px-4 py-3 md:px-[40px] lg:px-[80px] ${isSticky && viewState === 'home' && !isSearchActive ? 'translate-y-0 opacity-100' : '-translate-y-full opacity-0 pointer-events-none'}`}>
-        <div className="max-w-[2520px] mx-auto flex items-center gap-6">
+      <div className={`fixed top-0 left-0 right-0 z-[60] bg-white/40 backdrop-blur-md border-b border-warm-border/10 transform transition-all duration-500 ease-in-out px-4 py-3 md:px-12 ${isSticky && viewState === 'home' && !isSearchActive ? 'translate-y-0 opacity-100' : '-translate-y-full opacity-0 pointer-events-none'}`}>
+        <div className="max-w-7xl mx-auto flex items-center gap-6">
           <div className="hidden md:block cursor-pointer hover:scale-110 transition-transform" onClick={() => setViewState('home')}>
             <SnoutLogo className="w-9 h-9" />
           </div>
